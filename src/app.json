@@ -10,7 +10,8 @@
     "icon": "./assets/icons/app.png",
     "loading": {
       "icon": "./assets/icons/loading.png",
-      "hideExponentText": true
+      "hideExponentText": true,
+      "backgroundColor": "#0F5A43"
     },
     "packagerOpts": {
       "assetExts": ["ttf", "mp4"]
