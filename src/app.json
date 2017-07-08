@@ -18,6 +18,18 @@
     },
     "ios": {
       "supportsTablet": true
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "karthik-u0",
+            "project": "tutorpug",
+            "authToken": ""
+          }
+        }
+      ]
     }
   }
 }
