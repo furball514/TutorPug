@@ -1,19 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 export default class HomeScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text
-          allowFontScaling={false}
-          selectable={false}
-          style={styles.license}
-          onPress={() => navigate("License")}
-        >
-          LICENSE
-        </Text>
+        <TouchableOpacity onPress={() => navigate("License")}>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={styles.license}
+          >
+            LICENSE
+          </Text>
+        </TouchableOpacity>
         <Image
           source={require("./../assets/icons/loading.png")}
           style={styles.logo}
@@ -49,13 +50,15 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     marginRight: 9,
-    fontWeight: "normal"
+    fontWeight: "normal",
+    fontFamily: "roboto"
   },
   signInText: {
     alignSelf: "center",
     fontSize: 15,
     color: "#FDF760",
-    fontWeight: "normal"
+    fontWeight: "normal",
+    fontFamily: "roboto"
   },
   footer: {
     position: "absolute",

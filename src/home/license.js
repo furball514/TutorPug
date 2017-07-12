@@ -62,3 +62,5 @@ const styles = StyleSheet.create({
     height: 900
   }
 });
+
+//modal

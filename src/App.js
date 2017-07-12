@@ -1,29 +1,16 @@
 import React from "react";
 import Sentry from "sentry-expo";
-import { Text, TouchableOpacity, Platform, Image } from "react-native";
-import { AppLoading, Font, Asset } from "expo";
+import { Text, TouchableOpacity, Platform } from "react-native";
+import { AppLoading } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import HomeScreen from "./home/homescreen";
 import LicenseView from "./home/license";
+import cacheAssetsAsync from "./cacheAssets";
 
 Sentry.config(
   "https://a91c8897643140638ddfd686dbf42476@sentry.io/189285"
 ).install();
-
-function cacheImages(images) {
-  return images.map(image => {
-    if (typeof image === "string") {
-      return Image.prefetch(image);
-    } else {
-      return Asset.fromModule(image).downloadAsync();
-    }
-  });
-}
-
-function cacheFonts(fonts) {
-  return fonts.map(font => Font.loadAsync(font));
-}
 
 const App = StackNavigator({
   Home: {
@@ -72,14 +59,19 @@ export default class AppView extends React.Component {
   };
 
   async _loadAssetsAsync() {
-    const imageAssets = cacheImages([require("./assets/icons/loading.png")]);
-    const fontAssets = cacheFonts([
-      {
-        roboto: require("./assets/fonts/Roboto-Regular.ttf")
-      }
-    ]);
-    await Promise.all([...imageAssets, ...fontAssets]);
-    this.setState({ appIsReady: true });
+    try {
+      await cacheAssetsAsync({
+        images: [require("./assets/icons/loading.png")],
+        fonts: [
+          Ionicons.font,
+          { roboto: require("./assets/fonts/Roboto-Regular.ttf") }
+        ]
+      });
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      this.setState({ appIsReady: true });
+    }
   }
 
   componentWillMount() {
@@ -87,8 +79,6 @@ export default class AppView extends React.Component {
   }
 
   render() {
-    this.state.appIsReady ? <HomeScreen /> : <AppLoading />;
+    return this.state.appIsReady ? <App /> : <AppLoading />;
   }
 }
-
-//cache fonts,imgs,icons
