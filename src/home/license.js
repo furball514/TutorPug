@@ -8,18 +8,31 @@ export default class LicenseView extends React.Component {
         <View style={styles.info}>
           <Text allowFontScaling={false} selectable={false} style={styles.text}>
             This App's Source Code Is Publicly Viewable On{" "}
-            <Text style={styles.link} allowFontScaling={false}>
-              Github
+            <Text
+              onPress={() =>
+                Linking.openURL(
+                  "https://github.com/furball514/TutorPug"
+                ).catch(err => console.error(err))}
+              style={styles.link}
+              allowFontScaling={false}
+            >
+              Github.
             </Text>
           </Text>
           <Text allowFontScaling={false} style={styles.text}>
             This App Is Licensed Under
             <Text selectable={true} allowFontScaling={false}>
-              {" "}The Microsoft Reference Source License
+              {" "}The Microsoft Reference Source License.
             </Text>
           </Text>
         </View>
-        <WebView />
+        <WebView
+          source={{
+            uri: "https://github.com/furball514/TutorPug/blob/master/LICENSE"
+          }}
+          style={styles.webview}
+          startInLoadingState={true}
+        />
       </View>
     );
   }
@@ -28,25 +41,24 @@ export default class LicenseView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0F5A43"
+    backgroundColor: "white"
   },
   info: {
-    flex: 1,
-    marginTop: 25,
-    alignContent: "space-around"
+    marginTop: 10,
+    marginBottom: 10
   },
   text: {
-    color: "white"
+    fontWeight: "normal",
+    fontSize: 20,
+    marginLeft: 7
   },
   link: {
     textDecorationLine: "underline",
-    color: "lightblue"
+    color: "blue",
+    fontWeight: "normal"
+  },
+  webview: {
+    alignSelf: "stretch",
+    height: 900
   }
 });
-
-//linking
-//webview
-//layout
-//header
-//backbutton
-//fontweight
