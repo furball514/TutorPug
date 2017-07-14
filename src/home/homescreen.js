@@ -14,6 +14,10 @@ export default class HomeScreen extends React.Component {
     modalVisible: false
   };
 
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -31,11 +35,16 @@ export default class HomeScreen extends React.Component {
           source={require("./../assets/icons/loading.png")}
           style={styles.logo}
         />
+
         <SignUp />
+
+        <SignIn
+          visible={this.state.modalVisible}
+          setModalVisible={this.setModalVisible}
+        />
+
         <View style={styles.footer}>
-          <TouchableOpacity
-            onPress={() => <SignIn visible={this.state.modalVisible} />}
-          >
+          <TouchableOpacity onPress={this.setModalVisible(true)}>
             <Text
               selectable={false}
               allowFontScaling={false}
@@ -90,31 +99,19 @@ class SignUp extends React.Component {
 }
 
 class SignIn extends React.Component {
-  state = {
-    visible: false
-  };
-
-  componentWillMount() {
-    this.setState({ visible: this.props.visible });
-  }
-
-  setModalVisible(visible) {
-    this.setState({ visible });
-  }
-
   render() {
     return (
       <Modal
         animationType={"slide"}
         transparent={false}
-        visible={this.state.visible}
+        visible={this.props.visible}
       >
         <View style={{ marginTop: 22 }}>
           <View>
             <Text>Hello World!</Text>
             <TouchableOpacity
               onPress={() => {
-                this.setModalVisible(!this.state.visible);
+                this.props.setModalVisible(!this.props.visible);
               }}
             >
               <Text>Hide Modal</Text>
@@ -192,3 +189,5 @@ const styles = StyleSheet.create({
 });
 
 //fix modal
+/* visible={this.state.modalVisible}
+this.setModalVisible(!this.state.modalVisible); */
