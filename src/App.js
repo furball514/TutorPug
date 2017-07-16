@@ -82,3 +82,4 @@ export default class AppView extends React.Component {
     return this.state.appIsReady ? <App /> : <AppLoading />;
   }
 }
+//android

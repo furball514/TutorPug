@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Platform
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 
@@ -10,6 +17,27 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    const iosDismiss = (
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => this.setState({ visibleModal: false })}
+      >
+        <Text style={styles.cancelText} allowFontScaling={false}>
+          Cancel
+        </Text>
+      </TouchableOpacity>
+    );
+    const androidDismiss = (
+      <View style={styles.cancelButton}>
+        <Text
+          style={styles.cancelText}
+          allowFontScaling={false}
+          onPress={() => this.setState({ visibleModal: false })}
+        >
+          Cancel
+        </Text>
+      </View>
+    );
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigate("License")}>
@@ -48,14 +76,7 @@ export default class HomeScreen extends React.Component {
           <View style={styles.modalContent}>
             <SignIn />
           </View>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={() => this.setState({ visibleModal: false })}
-          >
-            <Text style={styles.cancelText} allowFontScaling={false}>
-              Cancel
-            </Text>
-          </TouchableOpacity>
+          {Platform.OS === "ios" ? iosDismiss : androidDismiss}
         </Modal>
       </View>
     );
@@ -105,6 +126,9 @@ class SignIn extends React.Component {
   render() {
     return (
       <View style={styles.signin}>
+        {Platform.OS === "ios"
+          ? null
+          : <Text style={styles.header}> Sign In </Text>}
         <TouchableOpacity style={styles.lightFbButton}>
           <Ionicons
             name="logo-facebook"
@@ -120,7 +144,7 @@ class SignIn extends React.Component {
             Sign in with Facebook
           </Text>
         </TouchableOpacity>
-        <View style={styles.border} />
+
         <TouchableOpacity style={styles.lightGButton}>
           <Ionicons
             name="logo-google"
@@ -205,50 +229,78 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 50
   },
-  modal: {
-    justifyContent: "flex-end"
-  },
-  modalContent: {
-    backgroundColor: "white",
-    borderRadius: 14,
-    marginBottom: 20,
-    padding: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "rgba(0, 0, 0, 0.1)"
-  },
-  cancelButton: {
-    backgroundColor: "white",
-    borderRadius: 14
-  },
-  cancelText: {
-    padding: 10,
-    textAlign: "center",
-    color: "red",
-    fontSize: 24,
-    fontWeight: "500",
-    backgroundColor: "transparent",
-    fontFamily: "roboto"
-  },
+  modal:
+    Platform.OS === "ios"
+      ? {
+          justifyContent: "flex-end"
+        }
+      : null,
+  modalContent:
+    Platform.OS === "ios"
+      ? {
+          backgroundColor: "white",
+          borderRadius: 14,
+          marginBottom: 20,
+          padding: 22,
+          justifyContent: "center",
+          alignItems: "center",
+          borderColor: "rgba(0, 0, 0, 0.1)"
+        }
+      : {
+          backgroundColor: "white",
+          padding: 22,
+          justifyContent: "center",
+          alignItems: "center",
+          borderWidth: 1,
+          borderColor: "#00897b"
+        },
+  cancelButton:
+    Platform.OS === "ios"
+      ? {
+          backgroundColor: "white",
+          borderRadius: 14
+        }
+      : { backgroundColor: "white" },
+  cancelText:
+    Platform.OS === "ios"
+      ? {
+          padding: 10,
+          textAlign: "center",
+          color: "red",
+          fontSize: 24,
+          fontWeight: "500",
+          backgroundColor: "transparent",
+          fontFamily: "roboto"
+        }
+      : {
+          padding: 10,
+          textAlign: "right",
+          color: "#00897b",
+          fontSize: 24,
+          fontWeight: "500",
+          fontFamily: "roboto"
+        },
   signin: {
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    alignContent: "center",
+    backgroundColor: "transparent"
   },
   lightFbButton: {
-    marginBottom: 10,
+    marginBottom: 7,
     height: 40,
     width: 270,
     flexDirection: "row",
     justifyContent: "space-between",
-    borderRadius: 5
+    borderBottomColor: "black",
+    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
   },
   lightGButton: {
     height: 37,
     width: 274,
     flexDirection: "row",
-    justifyContent: "center",
-    borderRadius: 5
+    justifyContent: "center"
   },
   darkSignupText: {
     fontSize: 23,
@@ -256,13 +308,16 @@ const styles = StyleSheet.create({
     padding: 5,
     fontWeight: "normal"
   },
-  border: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1
+  header: {
+    color: "white",
+    backgroundColor: "#00897b",
+    textAlign: "left",
+    fontFamily: "roboto",
+    fontWeight: "800"
   }
 });
 
 //g icon
 //best p
-//border
-//background
+//background p
+//modal touchable
