@@ -5,7 +5,7 @@ export default class LicenseView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.info}>
+        <View style={styles.info} accessible={true}>
           <Text allowFontScaling={false} selectable={false} style={styles.text}>
             This App's Source Code Is Publicly Viewable On{" "}
             <Text

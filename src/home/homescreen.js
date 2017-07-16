@@ -1,21 +1,15 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Modal
-} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Modal from "react-native-modal";
 
 export default class HomeScreen extends React.Component {
   state = {
-    modalVisible: false
+    visibleModal: false
   };
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+  setModalVisible(visibleModal) {
+    this.setState({ visibleModal });
   }
 
   render() {
@@ -34,17 +28,16 @@ export default class HomeScreen extends React.Component {
         <Image
           source={require("./../assets/icons/loading.png")}
           style={styles.logo}
+          accessible={true}
+          accessibilityLabel="logo"
         />
 
         <SignUp />
 
-        <SignIn
-          visible={this.state.modalVisible}
-          setModalVisible={this.setModalVisible}
-        />
-
         <View style={styles.footer}>
-          <TouchableOpacity onPress={this.setModalVisible(true)}>
+          <TouchableOpacity
+            onPress={() => this.setState({ visibleModal: true })}
+          >
             <Text
               selectable={false}
               allowFontScaling={false}
@@ -54,6 +47,20 @@ export default class HomeScreen extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <Modal isVisible={this.state.visibleModal} style={styles.modal}>
+          <View style={styles.modalContent}>
+            <SignIn />
+          </View>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => this.setState({ visibleModal: false })}
+          >
+            <Text style={styles.cancelText} allowFontScaling={false}>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+        </Modal>
       </View>
     );
   }
@@ -101,24 +108,39 @@ class SignUp extends React.Component {
 class SignIn extends React.Component {
   render() {
     return (
-      <Modal
-        animationType={"slide"}
-        transparent={false}
-        visible={this.props.visible}
-      >
-        <View style={{ marginTop: 22 }}>
-          <View>
-            <Text>Hello World!</Text>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.setModalVisible(!this.props.visible);
-              }}
-            >
-              <Text>Hide Modal</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <View style={styles.signin}>
+        <TouchableOpacity style={styles.lightFbButton}>
+          <Ionicons
+            name="logo-facebook"
+            color="#3b5998"
+            size={32}
+            style={styles.icons}
+          />
+          <Text
+            style={styles.darkSignupText}
+            allowFontScaling={false}
+            selectable={false}
+          >
+            Sign in with Facebook
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.border} />
+        <TouchableOpacity style={styles.lightGButton}>
+          <Ionicons
+            name="logo-google"
+            color="#dd4b39"
+            size={28}
+            style={styles.icons}
+          />
+          <Text
+            style={styles.darkSignupText}
+            allowFontScaling={false}
+            selectable={false}
+          >
+            Sign in with Google
+          </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -160,7 +182,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 23,
     fontFamily: "roboto",
-    padding: 5
+    padding: 5,
+    fontWeight: "normal"
   },
   fbButton: {
     marginBottom: 10,
@@ -185,9 +208,65 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 50
+  },
+  modal: {
+    justifyContent: "flex-end"
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 14,
+    marginBottom: 20,
+    padding: 22,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "rgba(0, 0, 0, 0.1)"
+  },
+  cancelButton: {
+    backgroundColor: "white",
+    borderRadius: 14
+  },
+  cancelText: {
+    padding: 10,
+    textAlign: "center",
+    color: "red",
+    fontSize: 24,
+    fontWeight: "500",
+    backgroundColor: "transparent",
+    fontFamily: "roboto"
+  },
+  signin: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center"
+  },
+  lightFbButton: {
+    marginBottom: 10,
+    height: 40,
+    width: 270,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderRadius: 5
+  },
+  lightGButton: {
+    height: 37,
+    width: 274,
+    flexDirection: "row",
+    justifyContent: "center",
+    borderRadius: 5
+  },
+  darkSignupText: {
+    fontSize: 23,
+    fontFamily: "roboto",
+    padding: 5,
+    fontWeight: "normal"
+  },
+  border: {
+    borderBottomColor: "black",
+    borderBottomWidth: 1
   }
 });
 
-//fix modal
-/* visible={this.state.modalVisible}
-this.setModalVisible(!this.state.modalVisible); */
+//g icon
+//best p
+//border
+//background
