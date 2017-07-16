@@ -8,10 +8,6 @@ export default class HomeScreen extends React.Component {
     visibleModal: false
   };
 
-  setModalVisible(visibleModal) {
-    this.setState({ visibleModal });
-  }
-
   render() {
     const { navigate } = this.props.navigation;
     return (
