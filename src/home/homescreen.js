@@ -5,10 +5,13 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Platform
+  Platform,
+  Linking
 } from "react-native";
+import { Constants, WebBrowser } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
+let authenticationURL = "";
 
 export default class HomeScreen extends React.Component {
   state = {
@@ -84,10 +87,36 @@ export default class HomeScreen extends React.Component {
 }
 
 class SignUp extends React.Component {
+  componentDidMount() {
+    Linking.addEventListener("url", this._handleRedirect);
+    Linking.getInitialURL().then(url => {
+      if (url) {
+        this._handleRedirect({ url });
+      }
+    });
+  }
+
+  _handleRedirect = async ({ url }) => {
+    WebBrowser.dismissBrowser();
+    let token = url.split("/+redirect/?user=")[1];
+    alert(decodeURIComponent(token));
+  };
+
+  authenticate = async provider => {
+    await WebBrowser.openBrowserAsync(`${authenticationURL}${provider}`);
+  };
+
+  componentWillUnmount() {
+    Linking.removeEventListener("url", this._handleRedirect);
+  }
+
   render() {
     return (
       <View style={styles.signup}>
-        <TouchableOpacity style={styles.fbButton}>
+        <TouchableOpacity
+          style={styles.fbButton}
+          onPress={() => this.authenticate("facebook")}
+        >
           <Ionicons
             name="logo-facebook"
             color="white"
@@ -102,7 +131,10 @@ class SignUp extends React.Component {
             Sign up with Facebook
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.gButton}>
+        <TouchableOpacity
+          style={styles.gButton}
+          onPress={() => this.authenticate("google")}
+        >
           <Ionicons
             name="logo-google"
             color="white"
@@ -117,19 +149,63 @@ class SignUp extends React.Component {
             Sign up with Google
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.lnButton}
+          onPress={() => this.authenticate("linkedin")}
+        >
+          <Ionicons
+            name="logo-linkedin"
+            color="white"
+            size={32}
+            style={styles.icons}
+          />
+          <Text
+            style={styles.signupText}
+            allowFontScaling={false}
+            selectable={false}
+          >
+            Sign up with LinkedIn
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
 }
 
 class SignIn extends React.Component {
+  componentDidMount() {
+    Linking.addEventListener("url", this._handleRedirect);
+    Linking.getInitialURL().then(url => {
+      if (url) {
+        this._handleRedirect({ url });
+      }
+    });
+  }
+
+  _handleRedirect = async ({ url }) => {
+    WebBrowser.dismissBrowser();
+    let token = url.split("/+redirect/?user=")[1];
+    alert(decodeURIComponent(token));
+  };
+
+  authenticate = async provider => {
+    await WebBrowser.openBrowserAsync(`${authenticationURL}${provider}`);
+  };
+
+  componentWillUnmount() {
+    Linking.removeEventListener("url", this._handleRedirect);
+  }
+
   render() {
     return (
       <View style={styles.signin}>
         {Platform.OS === "ios"
           ? null
           : <Text style={styles.header}> Sign In </Text>}
-        <TouchableOpacity style={styles.lightFbButton}>
+        <TouchableOpacity
+          style={styles.lightFbButton}
+          onPress={() => this.authenticate("facebook")}
+        >
           <Ionicons
             name="logo-facebook"
             color="#3b5998"
@@ -144,8 +220,10 @@ class SignIn extends React.Component {
             Sign in with Facebook
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.lightGButton}>
+        <TouchableOpacity
+          style={styles.lightGButton}
+          onPress={() => this.authenticate("google")}
+        >
           <Ionicons
             name="logo-google"
             color="#dd4b39"
@@ -158,6 +236,24 @@ class SignIn extends React.Component {
             selectable={false}
           >
             Sign in with Google
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.lightLnButton}
+          onPress={() => this.authenticate("linkedin")}
+        >
+          <Ionicons
+            name="logo-linkedin"
+            color="#0077b5"
+            size={28}
+            style={styles.icons}
+          />
+          <Text
+            style={styles.darkSignupText}
+            allowFontScaling={false}
+            selectable={false}
+          >
+            Sign in with LinkedIn
           </Text>
         </TouchableOpacity>
       </View>
@@ -196,7 +292,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    marginTop: 80
+    marginTop: 60
   },
   signupText: {
     color: "white",
@@ -215,11 +311,20 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   gButton: {
+    marginBottom: 10,
     backgroundColor: "#dd4b39",
     height: 37,
     width: 274,
     flexDirection: "row",
     justifyContent: "center",
+    borderRadius: 5
+  },
+  lnButton: {
+    backgroundColor: "#0077b5",
+    height: 40,
+    width: 270,
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderRadius: 5
   },
   icons: { padding: 6, marginBottom: 2 },
@@ -288,7 +393,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   lightFbButton: {
-    marginBottom: 7,
+    marginBottom: 10,
     height: 40,
     width: 270,
     flexDirection: "row",
@@ -297,10 +402,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
   },
   lightGButton: {
+    marginBottom: 10,
     height: 37,
     width: 274,
     flexDirection: "row",
-    justifyContent: "center"
+    justifyContent: "center",
+    borderBottomColor: "black",
+    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
+  },
+  lightLnButton: {
+    height: 40,
+    width: 270,
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   darkSignupText: {
     fontSize: 23,
@@ -321,3 +435,8 @@ const styles = StyleSheet.create({
 //best p
 //background p
 //modal touchable
+//blue,gap
+//modal dismiss
+//test
+//url
+//style
