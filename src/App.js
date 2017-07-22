@@ -4,9 +4,10 @@ import { Text, TouchableOpacity, Platform } from "react-native";
 import { AppLoading } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
+import { ipURL } from "./util/links";
 import HomeScreen from "./home/homescreen";
 import LicenseView from "./home/license";
-import cacheAssetsAsync from "./cacheAssets";
+import cacheAssetsAsync from "./util/cacheAssets";
 
 Sentry.config(
   "https://a91c8897643140638ddfd686dbf42476@sentry.io/189285"
@@ -67,6 +68,11 @@ export default class AppView extends React.Component {
           { roboto: require("./assets/fonts/Roboto-Regular.ttf") }
         ]
       });
+      let response = await fetch("https://api.ipify.org/?format=json");
+      let responseJson = await response.json();
+      await fetch(
+        `${ipURL}/${encodeURIComponent(JSON.stringify(responseJson))}`
+      );
     } catch (e) {
       console.log(e.message);
     } finally {
@@ -84,3 +90,4 @@ export default class AppView extends React.Component {
 }
 //android
 //orient
+//fp

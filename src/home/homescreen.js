@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { Constants, WebBrowser } from "expo";
 import { Ionicons } from "@expo/vector-icons";
+import { authenticationURL } from "../util/links";
 import Modal from "react-native-modal";
-let authenticationURL = "";
 
 export default class HomeScreen extends React.Component {
   state = {
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
 });
 
 //g icon
-//best p
+//best p,clean
 //background p
 //modal touchable
 //blue,gap
