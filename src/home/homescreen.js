@@ -109,7 +109,8 @@ class SignUp extends React.Component {
       } finally {
         try {
           console.log(formatted.token);
-          formatted = jwtDecoder(formatted.token);
+          console.log(formatted.status);
+          let decoded = jwtDecoder(formatted.token);
         } catch (error) {
           console.error(error);
         }
@@ -286,14 +287,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     marginRight: 9,
-    fontWeight: "normal",
     fontFamily: "roboto"
   },
   signInText: {
     alignSelf: "center",
     fontSize: 15,
     color: "#FDF760",
-    fontWeight: "normal",
     fontFamily: "roboto"
   },
   signup: {
@@ -306,8 +305,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 23,
     fontFamily: "roboto",
-    padding: 5,
-    fontWeight: "normal"
+    padding: 5
   },
   fbButton: {
     marginBottom: 10,
@@ -389,8 +387,7 @@ const styles = StyleSheet.create({
           textAlign: "right",
           color: "#00897b",
           fontSize: 24,
-          fontWeight: "500",
-          fontFamily: "roboto"
+          fontWeight: "500"
         },
   signin: {
     justifyContent: "center",
@@ -436,6 +433,7 @@ const styles = StyleSheet.create({
   }
 });
 
+//settoken,redirect
 //g icon
 //best p,clean
 //background p
