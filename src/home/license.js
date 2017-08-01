@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View, Linking, WebView } from "react-native";
+import { StyleSheet, Text, View, WebView } from "react-native";
+import { WebBrowser } from "expo";
 
 export default class LicenseView extends React.Component {
   render() {
@@ -9,8 +10,8 @@ export default class LicenseView extends React.Component {
           <Text allowFontScaling={false} selectable={false} style={styles.text}>
             This App's Source Code Is Publicly Viewable On{" "}
             <Text
-              onPress={() =>
-                Linking.openURL(
+              onPress={async () =>
+                await WebBrowser.openBrowserAsync(
                   "https://github.com/furball514/TutorPug"
                 ).catch(err => console.error(err))}
               style={styles.link}

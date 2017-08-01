@@ -8,9 +8,10 @@ import {
   Platform,
   Linking
 } from "react-native";
-import { Constants, WebBrowser } from "expo";
+import { WebBrowser } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { authenticationURL } from "../util/links";
+import jwtDecoder from "jwt-decode";
 import Modal from "react-native-modal";
 
 export default class HomeScreen extends React.Component {
@@ -89,17 +90,30 @@ export default class HomeScreen extends React.Component {
 class SignUp extends React.Component {
   componentDidMount() {
     Linking.addEventListener("url", this._handleRedirect);
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        this._handleRedirect({ url });
-      }
-    });
   }
 
   _handleRedirect = async ({ url }) => {
     WebBrowser.dismissBrowser();
     let token = url.split("/+redirect/?user=")[1];
-    alert(decodeURIComponent(token));
+    let formatted;
+    if (token)
+      try {
+        formatted = JSON.parse(
+          decodeURIComponent(token)
+            .replace("#", "")
+            .replace("undefined", "")
+            .replace("%", "")
+        );
+      } catch (error) {
+        console.error(error);
+      } finally {
+        try {
+          console.log(formatted.token);
+          formatted = jwtDecoder(formatted.token);
+        } catch (error) {
+          console.error(error);
+        }
+      }
   };
 
   authenticate = async provider => {
@@ -175,17 +189,11 @@ class SignUp extends React.Component {
 class SignIn extends React.Component {
   componentDidMount() {
     Linking.addEventListener("url", this._handleRedirect);
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        this._handleRedirect({ url });
-      }
-    });
   }
 
   _handleRedirect = async ({ url }) => {
     WebBrowser.dismissBrowser();
     let token = url.split("/+redirect/?user=")[1];
-    alert(decodeURIComponent(token));
   };
 
   authenticate = async provider => {
@@ -345,7 +353,7 @@ const styles = StyleSheet.create({
       ? {
           backgroundColor: "white",
           borderRadius: 14,
-          marginBottom: 20,
+          marginBottom: 10,
           padding: 22,
           justifyContent: "center",
           alignItems: "center",
@@ -371,11 +379,10 @@ const styles = StyleSheet.create({
       ? {
           padding: 10,
           textAlign: "center",
-          color: "red",
+          color: "#5856d6",
           fontSize: 24,
-          fontWeight: "500",
-          backgroundColor: "transparent",
-          fontFamily: "roboto"
+          fontWeight: "600",
+          backgroundColor: "transparent"
         }
       : {
           padding: 10,
@@ -419,14 +426,12 @@ const styles = StyleSheet.create({
   darkSignupText: {
     fontSize: 23,
     fontFamily: "roboto",
-    padding: 5,
-    fontWeight: "normal"
+    padding: 5
   },
   header: {
     color: "white",
     backgroundColor: "#00897b",
     textAlign: "left",
-    fontFamily: "roboto",
     fontWeight: "800"
   }
 });
@@ -440,3 +445,4 @@ const styles = StyleSheet.create({
 //test
 //url
 //style
+//fw,ff
