@@ -3,6 +3,17 @@ import { Text } from "react-native";
 
 export class SignupView extends React.Component {
   render() {
-    return <Text> signup </Text>;
+    const { params } = this.props.navigation.state;
+    return (
+      <Text>
+        <Text>
+          {params.uniqueID}
+        </Text>
+        <Text> signup </Text>
+        <Text>
+          {params.provider}
+        </Text>
+      </Text>
+    );
   }
 }

@@ -107,3 +107,6 @@ export default class AppView extends React.Component {
 }
 //android
 //orient
+//access
+//log err
+//selectable

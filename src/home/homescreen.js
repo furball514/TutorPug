@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   Platform,
-  Linking
+  Linking,
+  AsyncStorage
 } from "react-native";
 import { WebBrowser } from "expo";
 import { Ionicons } from "@expo/vector-icons";
@@ -60,7 +61,10 @@ export default class HomeScreen extends React.Component {
           accessibilityLabel="logo"
         />
 
-        <SignUp />
+        <SignUp
+          navigation={this.props.navigation}
+          modalOpen={this.state.visibleModal}
+        />
 
         <View style={styles.footer}>
           <TouchableOpacity
@@ -78,7 +82,7 @@ export default class HomeScreen extends React.Component {
 
         <Modal isVisible={this.state.visibleModal} style={styles.modal}>
           <View style={styles.modalContent}>
-            <SignIn />
+            <SignIn navigation={this.props.navigation} />
           </View>
           {Platform.OS === "ios" ? iosDismiss : androidDismiss}
         </Modal>
@@ -93,6 +97,7 @@ class SignUp extends React.Component {
   }
 
   _handleRedirect = async ({ url }) => {
+    const { navigate } = this.props.navigation;
     WebBrowser.dismissBrowser();
     let token = url.split("/+redirect/?user=")[1];
     let formatted;
@@ -108,9 +113,17 @@ class SignUp extends React.Component {
         console.error(error);
       } finally {
         try {
-          console.log(formatted.token);
-          console.log(formatted.status);
+          try {
+            await AsyncStorage.setItem("TOKEN", formatted.token);
+          } catch (error) {
+            console.error(error);
+          }
           let decoded = jwtDecoder(formatted.token);
+          if (formatted.status === "signin") {
+            navigate("Signedin", decoded);
+          } else if (formatted.status === "signup") {
+            navigate("Signup", decoded);
+          }
         } catch (error) {
           console.error(error);
         }
@@ -122,10 +135,16 @@ class SignUp extends React.Component {
   };
 
   componentWillUnmount() {
-    Linking.removeEventListener("url", this._handleRedirect);
+    try {
+      Linking.removeEventListener("url", this._handleRedirect);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {
+    if (this.props.modalOpen)
+      Linking.removeEventListener("url", this._handleRedirect);
     return (
       <View style={styles.signup}>
         <TouchableOpacity
@@ -193,8 +212,39 @@ class SignIn extends React.Component {
   }
 
   _handleRedirect = async ({ url }) => {
+    const { navigate } = this.props.navigation;
     WebBrowser.dismissBrowser();
     let token = url.split("/+redirect/?user=")[1];
+    let formatted;
+    if (token)
+      try {
+        let end = decodeURIComponent(token).indexOf("}") + 1;
+        formatted = JSON.parse(
+          decodeURIComponent(token)
+            .slice(0, end)
+            .replace("#", "")
+            .replace("undefined", "")
+            .replace("%", "")
+        );
+      } catch (error) {
+        console.log(decodeURIComponent(token));
+      } finally {
+        try {
+          try {
+            await AsyncStorage.setItem("TOKEN", formatted.token);
+          } catch (error) {
+            console.error(error);
+          }
+          let decoded = jwtDecoder(formatted.token);
+          if (formatted.status === "signin") {
+            navigate("Signedin", decoded);
+          } else if (formatted.status === "signup") {
+            navigate("Signup", decoded);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
   };
 
   authenticate = async provider => {
@@ -438,9 +488,10 @@ const styles = StyleSheet.create({
 //best p,clean
 //background p
 //modal touchable
-//blue,gap
 //modal dismiss
 //test
 //url
 //style
 //fw,ff
+//jsonp
+//catch
