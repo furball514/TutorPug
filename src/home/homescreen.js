@@ -20,12 +20,16 @@ export default class HomeScreen extends React.Component {
     visibleModal: false
   };
 
+  toggleModal(visibleModal) {
+    this.setState({ visibleModal });
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     const iosDismiss = (
       <TouchableOpacity
         style={styles.cancelButton}
-        onPress={() => this.setState({ visibleModal: false })}
+        onPress={() => this.toggleModal(false)}
       >
         <Text style={styles.cancelText} allowFontScaling={false}>
           Cancel
@@ -37,7 +41,7 @@ export default class HomeScreen extends React.Component {
         <Text
           style={styles.cancelText}
           allowFontScaling={false}
-          onPress={() => this.setState({ visibleModal: false })}
+          onPress={() => this.toggleModal(false)}
         >
           Cancel
         </Text>
@@ -67,9 +71,7 @@ export default class HomeScreen extends React.Component {
         />
 
         <View style={styles.footer}>
-          <TouchableOpacity
-            onPress={() => this.setState({ visibleModal: true })}
-          >
+          <TouchableOpacity onPress={() => this.toggleModal(true)}>
             <Text
               selectable={false}
               allowFontScaling={false}
@@ -82,7 +84,10 @@ export default class HomeScreen extends React.Component {
 
         <Modal isVisible={this.state.visibleModal} style={styles.modal}>
           <View style={styles.modalContent}>
-            <SignIn navigation={this.props.navigation} />
+            <SignIn
+              navigation={this.props.navigation}
+              toggleModal={this.toggleModal.bind(this)}
+            />
           </View>
           {Platform.OS === "ios" ? iosDismiss : androidDismiss}
         </Modal>
@@ -103,14 +108,16 @@ class SignUp extends React.Component {
     let formatted;
     if (token)
       try {
+        let end = decodeURIComponent(token).lastIndexOf("}") + 1;
         formatted = JSON.parse(
           decodeURIComponent(token)
+            .slice(0, end)
             .replace("#", "")
             .replace("undefined", "")
             .replace("%", "")
         );
       } catch (error) {
-        console.error(error);
+        console.log(decodeURIComponent(token));
       } finally {
         try {
           try {
@@ -218,7 +225,7 @@ class SignIn extends React.Component {
     let formatted;
     if (token)
       try {
-        let end = decodeURIComponent(token).indexOf("}") + 1;
+        let end = decodeURIComponent(token).lastIndexOf("}") + 1;
         formatted = JSON.parse(
           decodeURIComponent(token)
             .slice(0, end)
@@ -245,6 +252,7 @@ class SignIn extends React.Component {
           console.error(error);
         }
       }
+    this.props.toggleModal(false);
   };
 
   authenticate = async provider => {
@@ -483,15 +491,15 @@ const styles = StyleSheet.create({
   }
 });
 
-//settoken,redirect
+//settoken
 //g icon
 //best p,clean
 //background p
 //modal touchable
-//modal dismiss
+//modal cancel
 //test
 //url
 //style
 //fw,ff
-//jsonp
 //catch
+//nav props

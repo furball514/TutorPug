@@ -1,6 +1,6 @@
 import React from "react";
 import Sentry from "sentry-expo";
-import { Text, TouchableOpacity, Platform } from "react-native";
+import { Text, TouchableOpacity, Platform, AsyncStorage } from "react-native";
 import { AppLoading } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
@@ -13,6 +13,17 @@ import cacheAssetsAsync from "./util/cacheAssets";
 Sentry.config(
   "https://a91c8897643140638ddfd686dbf42476@sentry.io/189285"
 ).install();
+
+const isSignedin = async () => {
+  try {
+    const token = await AsyncStorage.getItem("TOKEN");
+    if (token !== null) {
+      return true;
+    } else return false;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const App = StackNavigator(
   {
@@ -72,7 +83,7 @@ const App = StackNavigator(
     }
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: isSignedin() ? "Signedin" : "Home"
   }
 );
 
@@ -105,6 +116,9 @@ export default class AppView extends React.Component {
     return this.state.appIsReady ? <App /> : <AppLoading />;
   }
 }
+
+//exp
+//keychain
 //android
 //orient
 //access
