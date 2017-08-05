@@ -12,7 +12,6 @@ import {
 import { WebBrowser } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { authenticationURL } from "../util/links";
-import jwtDecoder from "jwt-decode";
 import Modal from "react-native-modal";
 
 export default class HomeScreen extends React.Component {
@@ -125,11 +124,10 @@ class SignUp extends React.Component {
           } catch (error) {
             console.error(error);
           }
-          let decoded = jwtDecoder(formatted.token);
           if (formatted.status === "signin") {
-            navigate("Signedin", decoded);
+            navigate("Signedin");
           } else if (formatted.status === "signup") {
-            navigate("Signup", decoded);
+            navigate("Signup");
           }
         } catch (error) {
           console.error(error);
@@ -242,11 +240,10 @@ class SignIn extends React.Component {
           } catch (error) {
             console.error(error);
           }
-          let decoded = jwtDecoder(formatted.token);
           if (formatted.status === "signin") {
-            navigate("Signedin", decoded);
+            navigate("Signedin");
           } else if (formatted.status === "signup") {
-            navigate("Signup", decoded);
+            navigate("Signup");
           }
         } catch (error) {
           console.error(error);
@@ -491,15 +488,11 @@ const styles = StyleSheet.create({
   }
 });
 
-//settoken
 //g icon
 //best p,clean
 //background p
 //modal touchable
 //modal cancel
-//test
-//url
 //style
 //fw,ff
 //catch
-//nav props

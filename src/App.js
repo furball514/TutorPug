@@ -8,88 +8,93 @@ import HomeScreen from "./home/homescreen";
 import LicenseView from "./home/license";
 import { SignedIn } from "./authenticated/signedin";
 import { SignupView } from "./authenticated/signup";
+import { apiURL } from "./util/links";
 import cacheAssetsAsync from "./util/cacheAssets";
 
 Sentry.config(
   "https://a91c8897643140638ddfd686dbf42476@sentry.io/189285"
 ).install();
 
-const isSignedin = async () => {
-  try {
-    const token = await AsyncStorage.getItem("TOKEN");
-    if (token !== null) {
-      return true;
-    } else return false;
-  } catch (error) {
-    console.error(error);
+class App extends React.Component {
+  componentWillMount() {
+    if (!this.props.signedin)
+      try {
+        AsyncStorage.removeItem("TOKEN", () => console.log("deleted"));
+      } catch (error) {
+        console.error(error);
+      }
   }
-};
 
-const App = StackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      header: null,
-      navigationOptions: {
-        header: null
+  render() {
+    const Root = StackNavigator(
+      {
+        Home: {
+          screen: HomeScreen,
+          header: null,
+          navigationOptions: {
+            header: null
+          }
+        },
+        License: {
+          screen: LicenseView,
+          navigationOptions: ({ navigation }) => ({
+            headerLeft:
+              Platform.OS === "ios"
+                ? <TouchableOpacity
+                    accessible={true}
+                    accessibilityLabel={"dismiss"}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Ionicons
+                      name="ios-close"
+                      color="blue"
+                      size={40}
+                      style={{ marginLeft: 16, marginTop: 5 }}
+                    />
+                  </TouchableOpacity>
+                : <TouchableOpacity
+                    accessible={true}
+                    accessibilityLabel={"dismiss"}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Ionicons
+                      name="md-close"
+                      size={40}
+                      style={{ marginLeft: 16, marginTop: 5 }}
+                    />
+                  </TouchableOpacity>,
+            headerTitle: <Text allowFontScaling={false}> LICENSE </Text>
+          })
+        },
+        Signedin: {
+          screen: SignedIn,
+          header: null,
+          navigationOptions: {
+            gesturesEnabled: false,
+            header: null
+          }
+        },
+        Signup: {
+          screen: SignupView,
+          header: null,
+          navigationOptions: {
+            gesturesEnabled: false,
+            header: null
+          }
+        }
+      },
+      {
+        initialRouteName: this.props.signedin ? "Signedin" : "Home"
       }
-    },
-    License: {
-      screen: LicenseView,
-      navigationOptions: ({ navigation }) => ({
-        headerLeft:
-          Platform.OS === "ios"
-            ? <TouchableOpacity
-                accessible={true}
-                accessibilityLabel={"dismiss"}
-                onPress={() => navigation.goBack()}
-              >
-                <Ionicons
-                  name="ios-close"
-                  color="blue"
-                  size={40}
-                  style={{ marginLeft: 16, marginTop: 5 }}
-                />
-              </TouchableOpacity>
-            : <TouchableOpacity
-                accessible={true}
-                accessibilityLabel={"dismiss"}
-                onPress={() => navigation.goBack()}
-              >
-                <Ionicons
-                  name="md-close"
-                  size={40}
-                  style={{ marginLeft: 16, marginTop: 5 }}
-                />
-              </TouchableOpacity>,
-        headerTitle: <Text allowFontScaling={false}> LICENSE </Text>
-      })
-    },
-    Signedin: {
-      screen: SignedIn,
-      header: null,
-      navigationOptions: {
-        gesturesEnabled: false,
-        header: null
-      }
-    },
-    Signup: {
-      screen: SignupView,
-      header: null,
-      navigationOptions: {
-        gesturesEnabled: false,
-        header: null
-      }
-    }
-  },
-  {
-    initialRouteName: isSignedin() ? "Signedin" : "Home"
+    );
+    return <Root />;
   }
-);
+}
 
 export default class AppView extends React.Component {
   state = {
-    appIsReady: false
+    appIsReady: false,
+    signedin: false
   };
 
   async _loadAssetsAsync() {
@@ -108,16 +113,41 @@ export default class AppView extends React.Component {
     }
   }
 
-  componentWillMount() {
-    this._loadAssetsAsync();
+  async _isSignedin() {
+    try {
+      const token = await AsyncStorage.getItem("TOKEN");
+      const response = await fetch(`${apiURL}/expiryCheck`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const expiryCheck = await response.text();
+      if (token !== null && expiryCheck === "success") {
+        this.setState({ signedin: true });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async componentWillMount() {
+    try {
+      await this._isSignedin();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this._loadAssetsAsync();
+    }
   }
 
   render() {
-    return this.state.appIsReady ? <App /> : <AppLoading />;
+    return this.state.appIsReady
+      ? <App signedin={this.state.signedin} />
+      : <AppLoading />;
   }
 }
 
-//exp
 //keychain
 //android
 //orient
