@@ -7,6 +7,7 @@
     "sdkVersion": "18.0.0",
     "version": "1.0.0",
     "primaryColor": "#0F5A43",
+    "orientation": "portrait",
     "icon": "./assets/icons/app.png",
     "loading": {
       "icon": "./assets/icons/loading.png",
@@ -17,8 +18,7 @@
       "assetExts": ["ttf", "mp4"]
     },
     "ios": {
-      "supportsTablet": true,
-      "orientation": "portrait"
+      "supportsTablet": true
     },
     "hooks": {
       "postPublish": [

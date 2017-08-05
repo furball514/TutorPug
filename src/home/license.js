@@ -16,11 +16,12 @@ export default class LicenseView extends React.Component {
                 ).catch(err => console.error(err))}
               style={styles.link}
               allowFontScaling={false}
+              selectable={false}
             >
               Github.
             </Text>
           </Text>
-          <Text allowFontScaling={false} style={styles.text}>
+          <Text allowFontScaling={false} style={styles.text} selectable={false}>
             This App Is Licensed Under
             <Text selectable={true} allowFontScaling={false}>
               {" "}The Microsoft Reference Source License.
@@ -49,14 +50,14 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   text: {
-    fontWeight: "normal",
+    fontFamily: "roboto",
     fontSize: 20,
     marginLeft: 7
   },
   link: {
     textDecorationLine: "underline",
     color: "blue",
-    fontWeight: "normal"
+    fontFamily: "roboto"
   },
   webview: {
     alignSelf: "stretch",

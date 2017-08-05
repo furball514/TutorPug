@@ -30,7 +30,11 @@ export default class HomeScreen extends React.Component {
         style={styles.cancelButton}
         onPress={() => this.toggleModal(false)}
       >
-        <Text style={styles.cancelText} allowFontScaling={false}>
+        <Text
+          style={styles.cancelText}
+          allowFontScaling={false}
+          selectable={false}
+        >
           Cancel
         </Text>
       </TouchableOpacity>
@@ -40,6 +44,7 @@ export default class HomeScreen extends React.Component {
         <Text
           style={styles.cancelText}
           allowFontScaling={false}
+          selectable={false}
           onPress={() => this.toggleModal(false)}
         >
           Cancel
@@ -185,7 +190,7 @@ class SignUp extends React.Component {
             allowFontScaling={false}
             selectable={false}
           >
-            Sign up with Google
+            Sign up with Google{" "}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -265,7 +270,9 @@ class SignIn extends React.Component {
       <View style={styles.signin}>
         {Platform.OS === "ios"
           ? null
-          : <Text style={styles.header}> Sign In </Text>}
+          : <Text style={styles.header} selectable={false}>
+              {" "}Sign In{" "}
+            </Text>}
         <TouchableOpacity
           style={styles.lightFbButton}
           onPress={() => this.authenticate("facebook")}
@@ -299,7 +306,7 @@ class SignIn extends React.Component {
             allowFontScaling={false}
             selectable={false}
           >
-            Sign in with Google
+            Sign in with Google{" "}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -331,7 +338,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F5A43"
   },
   logo: {
-    marginTop: 100,
+    marginTop: 90,
     width: null,
     resizeMode: "contain",
     height: 78
@@ -369,23 +376,24 @@ const styles = StyleSheet.create({
     width: 270,
     flexDirection: "row",
     justifyContent: "space-between",
-    borderRadius: 5
+    borderRadius: 5,
+    marginRight: 5
   },
   gButton: {
     marginBottom: 10,
     backgroundColor: "#dd4b39",
-    height: 37,
+    height: 40,
     width: 274,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
     borderRadius: 5
   },
   lnButton: {
     backgroundColor: "#0077b5",
     height: 40,
-    width: 270,
+    width: 274,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     borderRadius: 5
   },
   icons: { padding: 6, marginBottom: 2 },
@@ -448,8 +456,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    alignContent: "center",
-    backgroundColor: "transparent"
+    alignContent: "center"
   },
   lightFbButton: {
     marginBottom: 10,
@@ -458,14 +465,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomColor: "black",
+    marginRight: 5,
     borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
   },
   lightGButton: {
     marginBottom: 10,
-    height: 37,
-    width: 274,
+    height: 40,
+    width: 270,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
     borderBottomColor: "black",
     borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
   },
@@ -473,7 +481,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 270,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-around"
   },
   darkSignupText: {
     fontSize: 23,
@@ -488,11 +496,7 @@ const styles = StyleSheet.create({
   }
 });
 
-//g icon
 //best p,clean
-//background p
-//modal touchable
-//modal cancel
+//background pr
+//modal-touchable,dismiss
 //style
-//fw,ff
-//catch

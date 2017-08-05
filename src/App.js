@@ -63,7 +63,11 @@ class App extends React.Component {
                       style={{ marginLeft: 16, marginTop: 5 }}
                     />
                   </TouchableOpacity>,
-            headerTitle: <Text allowFontScaling={false}> LICENSE </Text>
+            headerTitle: (
+              <Text allowFontScaling={false} style={{ fontFamily: "roboto" }}>
+                LICENSE
+              </Text>
+            )
           })
         },
         Signedin: {
@@ -152,5 +156,11 @@ export default class AppView extends React.Component {
 //android
 //orient
 //access
-//log err
 //selectable
+
+//log err
+//sentry
+//homescreen space
+//links
+//uri
+//jwt
