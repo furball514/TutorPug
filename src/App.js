@@ -59,15 +59,38 @@ class App extends React.Component {
                   >
                     <Ionicons
                       name="md-close"
-                      size={40}
-                      style={{ marginLeft: 16, marginTop: 5 }}
+                      size={35}
+                      color="white"
+                      style={{ marginLeft: 16, marginTop: 20 }}
                     />
                   </TouchableOpacity>,
-            headerTitle: (
-              <Text allowFontScaling={false} style={{ fontFamily: "roboto" }}>
-                LICENSE
-              </Text>
-            )
+            headerTitle:
+              Platform.OS === "ios"
+                ? <Text
+                    allowFontScaling={false}
+                    selectable={false}
+                    style={{ fontFamily: "roboto" }}
+                  >
+                    LICENSE
+                  </Text>
+                : <Text
+                    selectable={false}
+                    style={{
+                      fontWeight: "400",
+                      color: "white",
+                      fontSize: 35,
+                      marginLeft: 30,
+                      marginTop: 20,
+                      textAlign: "left"
+                    }}
+                  >
+                    License
+                  </Text>,
+            headerStyle:
+              Platform.OS === "ios"
+                ? { backgroundColor: "white" }
+                : { backgroundColor: "#00897b", elevation: 3 },
+            headerPressColorAndroid: "white"
           })
         },
         Signedin: {
@@ -164,3 +187,7 @@ export default class AppView extends React.Component {
 //links
 //uri
 //jwt
+
+//ios
+//shad
+//style

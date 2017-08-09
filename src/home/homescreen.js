@@ -41,14 +41,16 @@ export default class HomeScreen extends React.Component {
     );
     const androidDismiss = (
       <View style={styles.cancelButton}>
-        <Text
-          style={styles.cancelText}
-          allowFontScaling={false}
-          selectable={false}
-          onPress={() => this.toggleModal(false)}
-        >
-          Cancel
-        </Text>
+        <TouchableOpacity>
+          <Text
+            style={styles.cancelText}
+            allowFontScaling={false}
+            selectable={false}
+            onPress={() => this.toggleModal(false)}
+          >
+            CANCEL
+          </Text>
+        </TouchableOpacity>
       </View>
     );
     return (
@@ -273,6 +275,15 @@ class SignIn extends React.Component {
           : <Text style={styles.header} selectable={false}>
               {" "}Sign In{" "}
             </Text>}
+        {Platform.OS === "ios"
+          ? null
+          : <View
+              style={{
+                width: 322,
+                borderBottomColor: "black",
+                borderBottomWidth: 0.4
+              }}
+            />}
         <TouchableOpacity
           style={styles.lightFbButton}
           onPress={() => this.authenticate("facebook")}
@@ -373,11 +384,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#3b5998",
     height: 40,
-    width: 270,
+    width: Platform.OS === "ios" ? 270 : 274,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: Platform.OS === "ios" ? "space-between" : "space-around",
     borderRadius: 5,
-    marginRight: 5
+    marginRight: Platform.OS === "ios" ? 5 : 0
   },
   gButton: {
     marginBottom: 10,
@@ -408,7 +419,9 @@ const styles = StyleSheet.create({
       ? {
           justifyContent: "flex-end"
         }
-      : null,
+      : {
+          justifyContent: "center"
+        },
   modalContent:
     Platform.OS === "ios"
       ? {
@@ -425,8 +438,8 @@ const styles = StyleSheet.create({
           padding: 22,
           justifyContent: "center",
           alignItems: "center",
-          borderWidth: 1,
-          borderColor: "#00897b"
+          borderBottomColor: "black",
+          borderBottomWidth: 0.4
         },
   cancelButton:
     Platform.OS === "ios"
@@ -434,7 +447,7 @@ const styles = StyleSheet.create({
           backgroundColor: "white",
           borderRadius: 14
         }
-      : { backgroundColor: "white" },
+      : { backgroundColor: "white", height: 60, justifyContent: "center" },
   cancelText:
     Platform.OS === "ios"
       ? {
@@ -446,11 +459,11 @@ const styles = StyleSheet.create({
           backgroundColor: "transparent"
         }
       : {
-          padding: 10,
+          padding: 14,
           textAlign: "right",
           color: "#00897b",
           fontSize: 24,
-          fontWeight: "500"
+          fontWeight: "400"
         },
   signin: {
     justifyContent: "center",
@@ -460,13 +473,14 @@ const styles = StyleSheet.create({
   },
   lightFbButton: {
     marginBottom: 10,
+    marginTop: Platform.OS === "ios" ? 0 : 10,
     height: 40,
     width: 270,
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomColor: "black",
-    marginRight: 5,
-    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
+    marginRight: Platform.OS === "ios" ? 5 : 0,
+    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0
   },
   lightGButton: {
     marginBottom: 10,
@@ -475,7 +489,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     borderBottomColor: "black",
-    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0.5
+    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0
   },
   lightLnButton: {
     height: 40,
@@ -489,14 +503,16 @@ const styles = StyleSheet.create({
     padding: 5
   },
   header: {
-    color: "white",
-    backgroundColor: "#00897b",
-    textAlign: "left",
-    fontWeight: "800"
+    alignSelf: "flex-start",
+    fontFamily: "roboto",
+    fontSize: 35,
+    marginLeft: 12,
+    marginBottom: 10,
+    paddingRight: 12
   }
 });
 
 //best p,clean
 //background pr
 //modal-touchable,dismiss
-//style
+//style,android
