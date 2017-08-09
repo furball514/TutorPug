@@ -59,9 +59,9 @@ class App extends React.Component {
                   >
                     <Ionicons
                       name="md-close"
-                      size={35}
+                      size={32}
                       color="white"
-                      style={{ marginLeft: 16, marginTop: 20 }}
+                      style={{ marginLeft: 20, marginTop: 20 }}
                     />
                   </TouchableOpacity>,
             headerTitle:
@@ -78,10 +78,10 @@ class App extends React.Component {
                     style={{
                       fontWeight: "400",
                       color: "white",
-                      fontSize: 35,
+                      fontSize: 25,
                       marginLeft: 30,
-                      marginTop: 20,
-                      textAlign: "left"
+                      textAlign: "left",
+                      marginTop: 20
                     }}
                   >
                     License
@@ -89,7 +89,11 @@ class App extends React.Component {
             headerStyle:
               Platform.OS === "ios"
                 ? { backgroundColor: "white" }
-                : { backgroundColor: "#00897b", elevation: 3 },
+                : {
+                    backgroundColor: "#00897b",
+                    elevation: 4,
+                    height: 80
+                  },
             headerPressColorAndroid: "white"
           })
         },
@@ -176,18 +180,14 @@ export default class AppView extends React.Component {
 }
 
 //keychain
-//android
+//android, v
 //orient
 //access
 //selectable
 
 //log err
 //sentry
-//homescreen space
+//homescreen space - ios
 //links
 //uri
 //jwt
-
-//ios
-//shad
-//style
