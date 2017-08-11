@@ -11,6 +11,7 @@ export class SignedIn extends React.Component {
   };
 
   async componentDidMount() {
+    AsyncStorage.removeItem('TOKEN'); /*
     try {
       const token = await AsyncStorage.getItem("TOKEN");
       if (token !== null) {
@@ -24,7 +25,7 @@ export class SignedIn extends React.Component {
       }
     } catch (error) {
       console.error(error);
-    }
+    }*/
   }
 
   render() {
