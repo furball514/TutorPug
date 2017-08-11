@@ -44,26 +44,28 @@ export class SignupView extends React.Component {
           allowFontScaling={false}
           style={styles.question}
         >
-          Are you a ...?
+          Are you a ... ?
         </Text>
-        <TouchableOpacity>
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.options}
-          >
-            Student
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.options}
-          >
-            Tutor
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity style={styles.button}>
+            <Text
+              selectable={false}
+              allowFontScaling={false}
+              style={styles.options}
+            >
+              Student
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text
+              selectable={false}
+              allowFontScaling={false}
+              style={styles.options}
+            >
+              Tutor
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -84,19 +86,34 @@ const styles = StyleSheet.create({
   },
   question: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: 25,
     color: "#FDF760",
-    fontFamily: "roboto"
+    fontFamily: "roboto",
+    marginTop: 100
+  },
+  optionsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 80
+  },
+  button: {
+    backgroundColor: "green",
+    justifyContent: "center",
+    height: 60,
+    width: 64,
+    borderRadius: 50,
+    transform: [{ scaleX: 2 }]
   },
   options: {
     color: "white",
-    fontSize: 20,
+    fontSize: 14,
     alignSelf: "center",
     fontFamily: "roboto"
   }
 });
 
-//justifySelf
-//oval
 //blueishgreen
-//space-around
+//hr
+//layout
+//style
