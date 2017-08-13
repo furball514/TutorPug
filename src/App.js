@@ -114,6 +114,130 @@ class App extends React.Component {
             gesturesEnabled: false,
             header: null
           }
+        },
+        Sform: {
+          screen: StudentForm,
+          navigationOptions: ({ navigation }) => ({
+            headerLeft:
+              Platform.OS === "ios"
+                ? <TouchableOpacity
+                    accessible={true}
+                    accessibilityLabel={"dismiss"}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Ionicons
+                      name="ios-close"
+                      color="blue"
+                      size={40}
+                      style={{ marginLeft: 16, marginTop: 5 }}
+                    />
+                  </TouchableOpacity>
+                : <TouchableOpacity
+                    accessible={true}
+                    accessibilityLabel={"dismiss"}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Ionicons
+                      name="md-close"
+                      size={32}
+                      color="white"
+                      style={{ marginLeft: 20, marginTop: 20 }}
+                    />
+                  </TouchableOpacity>,
+            headerTitle:
+              Platform.OS === "ios"
+                ? <Text
+                    allowFontScaling={false}
+                    selectable={false}
+                    style={{ fontFamily: "roboto" }}
+                  >
+                    Profile
+                  </Text>
+                : <Text
+                    selectable={false}
+                    style={{
+                      fontWeight: "400",
+                      color: "white",
+                      fontSize: 25,
+                      marginLeft: 30,
+                      textAlign: "left",
+                      marginTop: 20
+                    }}
+                  >
+                    Profile
+                  </Text>,
+            headerStyle:
+              Platform.OS === "ios"
+                ? { backgroundColor: "white" }
+                : {
+                    backgroundColor: "#00897b",
+                    elevation: 4,
+                    height: 80
+                  },
+            headerPressColorAndroid: "white"
+          })
+        },
+        Tform: {
+          screen: TutorForm,
+          navigationOptions: ({ navigation }) => ({
+            headerLeft:
+              Platform.OS === "ios"
+                ? <TouchableOpacity
+                    accessible={true}
+                    accessibilityLabel={"dismiss"}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Ionicons
+                      name="ios-close"
+                      color="blue"
+                      size={40}
+                      style={{ marginLeft: 16, marginTop: 5 }}
+                    />
+                  </TouchableOpacity>
+                : <TouchableOpacity
+                    accessible={true}
+                    accessibilityLabel={"dismiss"}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Ionicons
+                      name="md-close"
+                      size={32}
+                      color="white"
+                      style={{ marginLeft: 20, marginTop: 20 }}
+                    />
+                  </TouchableOpacity>,
+            headerTitle:
+              Platform.OS === "ios"
+                ? <Text
+                    allowFontScaling={false}
+                    selectable={false}
+                    style={{ fontFamily: "roboto" }}
+                  >
+                    Profile
+                  </Text>
+                : <Text
+                    selectable={false}
+                    style={{
+                      fontWeight: "400",
+                      color: "white",
+                      fontSize: 25,
+                      marginLeft: 30,
+                      textAlign: "left",
+                      marginTop: 20
+                    }}
+                  >
+                    Profile
+                  </Text>,
+            headerStyle:
+              Platform.OS === "ios"
+                ? { backgroundColor: "white" }
+                : {
+                    backgroundColor: "#00897b",
+                    elevation: 4,
+                    height: 80
+                  },
+            headerPressColorAndroid: "white"
+          })
         }
       },
       {
@@ -187,6 +311,8 @@ export default class AppView extends React.Component {
 //access
 //~student~ /-type tutor
 //selectable
+//actionsheet
+//platformcolor
 
 //log err
 //sentry

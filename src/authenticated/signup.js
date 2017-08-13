@@ -10,7 +10,8 @@ import { apiURL } from "../util/links";
 
 export default class SignupView extends React.Component {
   state = {
-    data: {}
+    data: {},
+    token: ""
   };
 
   async componentDidMount() {
@@ -23,13 +24,14 @@ export default class SignupView extends React.Component {
         }
       });
       const data = await response.json();
-      this.setState({ data });
+      this.setState({ data, token });
     } catch (error) {
       console.error(error);
     }
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text
@@ -47,7 +49,14 @@ export default class SignupView extends React.Component {
           Are you a ... ?
         </Text>
         <View style={styles.optionsContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              navigate("Sform", {
+                data: this.state.data,
+                token: this.state.token
+              })}
+          >
             <Text
               selectable={false}
               allowFontScaling={false}
@@ -56,7 +65,14 @@ export default class SignupView extends React.Component {
               Student
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              navigate("Tform", {
+                data: this.state.data,
+                token: this.state.token
+              })}
+          >
             <Text
               selectable={false}
               allowFontScaling={false}
@@ -114,3 +130,4 @@ const styles = StyleSheet.create({
 });
 
 //style
+//errorhandling
