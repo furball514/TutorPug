@@ -149,7 +149,7 @@ class App extends React.Component {
                 ? <Text
                     allowFontScaling={false}
                     selectable={false}
-                    style={{ fontFamily: "roboto" }}
+                    style={{ fontFamily: "roboto", fontSize: 20 }}
                   >
                     Profile
                   </Text>
@@ -211,7 +211,7 @@ class App extends React.Component {
                 ? <Text
                     allowFontScaling={false}
                     selectable={false}
-                    style={{ fontFamily: "roboto" }}
+                    style={{ fontFamily: "roboto", fontSize: 20 }}
                   >
                     Profile
                   </Text>
@@ -314,6 +314,10 @@ export default class AppView extends React.Component {
 //actionsheet
 //platformcolor
 //apiendpoint
+//style
+//perform
+//best p,clean
+//expiry
 
 //log err
 //sentry

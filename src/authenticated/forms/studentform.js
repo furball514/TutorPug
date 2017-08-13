@@ -1,17 +1,25 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Platform, TouchableOpacity } from "react-native";
 
 export default class StudentForm extends React.Component {
   static navigationOptions = {
     headerRight:
       Platform.OS === "ios"
-        ? <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.submitText}
-          >
-            Done
-          </Text>
+        ? <TouchableOpacity>
+            <Text
+              selectable={false}
+              allowFontScaling={false}
+              style={{
+                color: "blue",
+                fontWeight: "600",
+                marginRight: 15,
+                marginTop: 3,
+                fontSize: 17
+              }}
+            >
+              Done
+            </Text>
+          </TouchableOpacity>
         : null
   };
 
@@ -20,9 +28,4 @@ export default class StudentForm extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  submitText: {
-    color: "blue",
-    fontWeight: "300"
-  }
-});
+const styles = StyleSheet.create({});
