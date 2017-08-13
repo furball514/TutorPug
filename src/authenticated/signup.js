@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { apiURL } from "../util/links";
 
-export class SignupView extends React.Component {
+export default class SignupView extends React.Component {
   state = {
     data: {}
   };
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignSelf: "flex-start",
     color: "white",
-    fontSize: 20,
+    fontSize: 25,
     marginLeft: 15,
     fontFamily: "roboto"
   },
@@ -89,16 +89,16 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "#FDF760",
     fontFamily: "roboto",
-    marginTop: 100
+    marginTop: 115
   },
   optionsContainer: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 80
+    marginTop: 105
   },
   button: {
-    backgroundColor: "green",
+    backgroundColor: "#00796b",
     justifyContent: "center",
     height: 60,
     width: 64,
@@ -113,7 +113,4 @@ const styles = StyleSheet.create({
   }
 });
 
-//blueishgreen
-//hr
-//layout
 //style

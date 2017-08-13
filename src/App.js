@@ -7,7 +7,9 @@ import { StackNavigator } from "react-navigation";
 import HomeScreen from "./home/homescreen";
 import LicenseView from "./home/license";
 import { SignedIn } from "./authenticated/signedin";
-import { SignupView } from "./authenticated/signup";
+import SignupView from "./authenticated/signup";
+import StudentForm from "./authenticated/forms/studentform";
+import TutorForm from "./authenticated/forms/tutorform";
 import { apiURL } from "./util/links";
 import cacheAssetsAsync from "./util/cacheAssets";
 
@@ -183,6 +185,7 @@ export default class AppView extends React.Component {
 //android, v
 //orient
 //access
+//~student~ /-type tutor
 //selectable
 
 //log err
