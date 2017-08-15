@@ -5,9 +5,7 @@ import {
   TextInput,
   StyleSheet,
   Platform,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView
+  TouchableOpacity
 } from "react-native";
 
 export default class StudentForm extends React.Component {
@@ -34,7 +32,7 @@ export default class StudentForm extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <View style={styles.section}>
           <Text
             selectable={false}
@@ -43,13 +41,7 @@ export default class StudentForm extends React.Component {
           >
             Profile Picture
           </Text>
-          <View
-            style={{
-              backgroundColor: "black",
-              borderRadius: 50,
-              alignSelf: "flex-end"
-            }}
-          />
+          <Text allowFontScaling={false}> gty </Text>
         </View>
         <View style={styles.section}>
           <Text
@@ -59,7 +51,7 @@ export default class StudentForm extends React.Component {
           >
             First Name
           </Text>
-          <TextInput style={styles.input} />
+          <Text allowFontScaling={false}>hfrtgh</Text>
         </View>
       </View>
     );
@@ -67,25 +59,22 @@ export default class StudentForm extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "space-between"
-  },
   section: {
     flex: 1,
     flexDirection: "row",
-    borderWidth: 0.3,
-    borderColor: "black",
-    justifyContent: "space-around",
+    justifyContent: "space-around", //
+    marginVertical: 20, //
+    height: 50, //
+    alignItems: "center",
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.3,
+    borderTopColor: "black",
+    borderBottomColor: "black"
   },
   label: {
     fontFamily: "roboto",
     color: "#0F5A43",
-    fontSize: 22,
-    alignSelf: "flex-start"
-  },
-  input: {
-    alignSelf: "flex-end"
+    fontSize: 22
   }
 });
 

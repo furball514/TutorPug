@@ -320,6 +320,8 @@ export default class AppView extends React.Component {
 //expiry
 //clipboard
 //links
+//statusbarheight
+//statusbar
 
 //log err
 //sentry
