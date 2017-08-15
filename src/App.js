@@ -306,7 +306,7 @@ export default class AppView extends React.Component {
 }
 
 //keychain
-//android, v
+//android, v , toast,md,-form
 //orient
 //access
 //~student~ /-type tutor
@@ -318,6 +318,8 @@ export default class AppView extends React.Component {
 //perform
 //best p,clean
 //expiry
+//clipboard
+//links
 
 //log err
 //sentry

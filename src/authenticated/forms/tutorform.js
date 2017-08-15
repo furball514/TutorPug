@@ -10,7 +10,7 @@ export default class TutorForm extends React.Component {
               selectable={false}
               allowFontScaling={false}
               style={{
-                color: "blue",
+                color: "#5856d6",
                 fontWeight: "600",
                 marginRight: 15,
                 marginTop: 3,
