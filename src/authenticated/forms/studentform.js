@@ -6,13 +6,17 @@ import {
   StyleSheet,
   Platform,
   ScrollView,
+  Picker,
   TouchableOpacity
 } from "react-native";
 
 export default class StudentForm extends React.Component {
   state = {
+    agePicker: false,
+    genderPicker: false,
     firstName: "",
-    lastName: ""
+    lastName: "",
+    age: "10"
   };
 
   static navigationOptions = {
@@ -105,6 +109,36 @@ export default class StudentForm extends React.Component {
           />
         </View>
         <View style={styles.border} />
+        <TouchableOpacity
+          style={styles.section}
+          onPress={() => this.setState({ agePicker: !this.state.agePicker })}
+        >
+          <Text
+            selectable={false}
+            allowFontScaling={false}
+            style={styles.label}
+          >
+            Age
+          </Text>
+          <Text allowFontScaling={false} selectable={false}>
+            {this.state.age}
+          </Text>
+        </TouchableOpacity>
+        {this.state.agePicker ? null : <View style={styles.border} />}
+        {this.state.agePicker
+          ? <View>
+              <Picker
+                style={{ height: 200 }}
+                selectedValue={this.state.age}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ age: itemValue })}
+              >
+                <Picker.Item label="10" value="10" />
+                <Picker.Item label="11" value="11" />
+              </Picker>
+              <View style={styles.border} />
+            </View>
+          : null}
       </ScrollView>
     );
   }
@@ -146,6 +180,8 @@ const styles = StyleSheet.create({
   }
 });
 
+//icons
+//validate
 //focus
 //style
 //view
