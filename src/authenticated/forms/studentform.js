@@ -5,10 +5,15 @@ import {
   TextInput,
   StyleSheet,
   Platform,
+  KeyboardAvoidingView,
   TouchableOpacity
 } from "react-native";
 
 export default class StudentForm extends React.Component {
+  state = {
+    firstName: "jared"
+  };
+
   static navigationOptions = {
     headerRight:
       Platform.OS === "ios"
@@ -32,7 +37,8 @@ export default class StudentForm extends React.Component {
 
   render() {
     return (
-      <View>
+      <KeyboardAvoidingView behavior="padding">
+        <View style={[styles.border, { marginTop: 40 }]} />
         <View style={styles.section}>
           <Text
             selectable={false}
@@ -43,6 +49,8 @@ export default class StudentForm extends React.Component {
           </Text>
           <Text allowFontScaling={false}> gty </Text>
         </View>
+        <View style={[styles.border, { marginBottom: 40 }]} />
+        <View style={styles.border} />
         <View style={styles.section}>
           <Text
             selectable={false}
@@ -51,9 +59,14 @@ export default class StudentForm extends React.Component {
           >
             First Name
           </Text>
-          <Text allowFontScaling={false}>hfrtgh</Text>
+          <TextInput
+            style={styles.textInput}
+            value={this.state.firstName}
+            onChangeText={firstName => this.setState({ firstName })}
+          />
         </View>
-      </View>
+        <View style={styles.border} />
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -63,18 +76,22 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around", //
-    marginVertical: 20, //
-    height: 50, //
-    alignItems: "center",
-    borderTopWidth: 0.3,
-    borderBottomWidth: 0.3,
-    borderTopColor: "black",
-    borderBottomColor: "black"
+    height: 65, //
+    alignItems: "center"
   },
   label: {
-    fontFamily: "roboto",
+    fontWeight: "500",
     color: "#0F5A43",
-    fontSize: 22
+    fontSize: 24
+  },
+  textInput: {
+    color: "#FDF760",
+    fontFamily: "roboto",
+    height: 20
+  },
+  border: {
+    borderBottomWidth: 0.3,
+    borderBottomColor: "black"
   }
 });
 
