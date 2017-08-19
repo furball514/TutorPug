@@ -1,6 +1,7 @@
 import React from "react";
-import { Text, AsyncStorage } from "react-native";
+import { Text } from "react-native";
 import jwtDecoder from "jwt-decode";
+import { SecureStore } from "expo";
 
 export class SignedIn extends React.Component {
   state = {
@@ -12,7 +13,7 @@ export class SignedIn extends React.Component {
 
   async componentDidMount() {
     try {
-      const token = await AsyncStorage.getItem("TOKEN");
+      const token = await SecureStore.getValueWithKeyAsync("TOKEN");
       if (token !== null) {
         let decoded = jwtDecoder(token);
         this.setState({

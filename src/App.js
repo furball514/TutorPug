@@ -1,7 +1,7 @@
 import React from "react";
 import Sentry from "sentry-expo";
-import { Text, TouchableOpacity, Platform, AsyncStorage } from "react-native";
-import { AppLoading } from "expo";
+import { Text, TouchableOpacity, Platform } from "react-native";
+import { AppLoading, SecureStore } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import HomeScreen from "./home/homescreen";
@@ -21,7 +21,8 @@ class App extends React.Component {
   componentWillMount() {
     if (!this.props.signedin)
       try {
-        AsyncStorage.removeItem("TOKEN", () => console.log("deleted"));
+        SecureStore.deleteValueWithKeyAsync("TOKEN");
+        console.log("deleted");
       } catch (error) {
         console.error(error);
       }
@@ -272,7 +273,7 @@ export default class AppView extends React.Component {
 
   async _isSignedin() {
     try {
-      const token = await AsyncStorage.getItem("TOKEN");
+      const token = await SecureStore.getValueWithKeyAsync("TOKEN");
       const response = await fetch(`${apiURL}/expiryCheck`, {
         method: "GET",
         headers: {
@@ -305,9 +306,6 @@ export default class AppView extends React.Component {
   }
 }
 
-//update sdks,devtools
-
-//keychain
 //android, v , toast,md,-form
 //orient
 //access
@@ -324,6 +322,7 @@ export default class AppView extends React.Component {
 //links
 //statusbarheight
 //statusbar
+//svg
 
 //log err
 //sentry

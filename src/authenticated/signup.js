@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  View,
-  Text,
-  AsyncStorage,
-  StyleSheet,
-  TouchableOpacity
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { SecureStore } from "expo";
 import { apiURL } from "../util/links";
 
 export default class SignupView extends React.Component {
@@ -14,9 +9,9 @@ export default class SignupView extends React.Component {
     token: ""
   };
 
-  async componentDidMount() {
+  async componentWillMount() {
     try {
-      const token = await AsyncStorage.getItem("TOKEN");
+      const token = await SecureStore.getValueWithKeyAsync("TOKEN");
       const response = await fetch(`${apiURL}/getAll`, {
         method: "GET",
         headers: {

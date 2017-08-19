@@ -6,10 +6,9 @@ import {
   Image,
   TouchableOpacity,
   Platform,
-  Linking,
-  AsyncStorage
+  Linking
 } from "react-native";
-import { WebBrowser } from "expo";
+import { WebBrowser, SecureStore } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { authenticationURL } from "../util/links";
 import Modal from "react-native-modal";
@@ -127,7 +126,7 @@ class SignUp extends React.Component {
       } finally {
         try {
           try {
-            await AsyncStorage.setItem("TOKEN", formatted.token);
+            await SecureStore.setValueWithKeyAsync(formatted.token, "TOKEN");
           } catch (error) {
             console.error(error);
           }
@@ -243,7 +242,7 @@ class SignIn extends React.Component {
       } finally {
         try {
           try {
-            await AsyncStorage.setItem("TOKEN", formatted.token);
+            await SecureStore.setValueWithKeyAsync(formatted.token, "TOKEN");
           } catch (error) {
             console.error(error);
           }

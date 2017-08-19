@@ -196,6 +196,20 @@ export default class StudentForm extends React.Component {
           <Text allowFontScaling={false}>required</Text>
         </View>
         <View style={[styles.border, { marginBottom: 40 }]} />
+
+        <Text allowFontScaling={false} selectable={false} style={styles.title}>
+          EDUCATION
+        </Text>
+        <View style={styles.border} />
+        <View style={styles.section} />
+        <View style={[styles.border, { marginBottom: 40 }]} />
+
+        <Text allowFontScaling={false} selectable={false} style={styles.title}>
+          CONTACT
+        </Text>
+        <View style={styles.border} />
+        <View style={styles.section} />
+        <View style={[styles.border, { marginBottom: 40 }]} />
       </ScrollView>
     );
   }
@@ -257,16 +271,10 @@ const styles = StyleSheet.create({
   }
 });
 
-//touchable
-//pickerstyle
-//helptext
-//scrollindicator
-//icons
+//picker bugs
+//erroralert
+//scrollindicator, keyboard
 //validate
-//focus
-//style
-//view
+//focus,touchable
 //inputs , defaults
-//colors
-//gradient
-//elevation
+//style
