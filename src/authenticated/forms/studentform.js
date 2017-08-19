@@ -9,6 +9,7 @@ import {
   Picker,
   TouchableOpacity
 } from "react-native";
+import { LinearGradient } from "expo";
 
 export default class StudentForm extends React.Component {
   state = {
@@ -16,7 +17,8 @@ export default class StudentForm extends React.Component {
     genderPicker: false,
     firstName: "",
     lastName: "",
-    age: "10"
+    age: "10",
+    gender: null
   };
 
   static navigationOptions = {
@@ -63,6 +65,7 @@ export default class StudentForm extends React.Component {
           <Text allowFontScaling={false}> gty </Text>
         </View>
         <View style={[styles.border, { marginBottom: 40 }]} />
+
         <Text allowFontScaling={false} selectable={false} style={styles.title}>
           BASIC INFO
         </Text>
@@ -120,15 +123,16 @@ export default class StudentForm extends React.Component {
           >
             Age
           </Text>
-          <Text allowFontScaling={false} selectable={false}>
+          <Text allowFontScaling={false} selectable={false} style={styles.text}>
             {this.state.age}
           </Text>
         </TouchableOpacity>
         {this.state.agePicker ? null : <View style={styles.border} />}
         {this.state.agePicker
-          ? <View>
+          ? <LinearGradient colors={["white", "#FDF760"]}>
               <Picker
-                style={{ height: 200 }}
+                style={styles.picker}
+                itemStyle={styles.pickerItem}
                 selectedValue={this.state.age}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({ age: itemValue })}
@@ -137,12 +141,71 @@ export default class StudentForm extends React.Component {
                 <Picker.Item label="11" value="11" />
               </Picker>
               <View style={styles.border} />
+            </LinearGradient>
+          : null}
+        <TouchableOpacity
+          style={styles.section}
+          onPress={() =>
+            this.setState({ genderPicker: !this.state.genderPicker })}
+        >
+          <Text
+            selectable={false}
+            allowFontScaling={false}
+            style={styles.label}
+          >
+            Gender
+          </Text>
+          <Text allowFontScaling={false} selectable={false} style={styles.text}>
+            {returnGender(this.state.gender)}
+          </Text>
+        </TouchableOpacity>
+        {this.state.genderPicker
+          ? null
+          : <View style={[styles.border, { marginBottom: 40 }]} />}
+        {this.state.genderPicker
+          ? <View>
+              <LinearGradient colors={["white", "#FDF760"]}>
+                <Picker
+                  style={styles.picker}
+                  itemStyle={styles.pickerItem}
+                  selectedValue={this.state.gender}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({ gender: itemValue })}
+                >
+                  <Picker.Item label="Female" value="female" />
+                  <Picker.Item label="Male" value="male" />
+                  <Picker.Item label="Leave blank" value={null} />
+                </Picker>
+              </LinearGradient>
+              <View style={[styles.border, { marginBottom: 40 }]} />
             </View>
           : null}
+
+        <Text allowFontScaling={false} selectable={false} style={styles.title}>
+          LOCATION
+        </Text>
+        <View style={styles.border} />
+        <View style={styles.section}>
+          <Text
+            selectable={false}
+            allowFontScaling={false}
+            style={styles.label}
+          >
+            Location
+          </Text>
+          <Text allowFontScaling={false}>required</Text>
+        </View>
+        <View style={[styles.border, { marginBottom: 40 }]} />
       </ScrollView>
     );
   }
 }
+
+const returnGender = gender => {
+  if (gender == null) {
+    return "Leave blank";
+  } else return `${gender.charAt(0).toUpperCase()}${gender.slice(1)}`;
+};
 
 const styles = StyleSheet.create({
   section: {
@@ -174,12 +237,30 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginRight: 20
   },
+  picker: {
+    height: 125,
+    justifyContent: "center"
+  },
+  pickerItem: {
+    fontSize: 30,
+    color: "#0F5A43",
+    fontWeight: "500"
+  },
   border: {
     borderBottomWidth: 0.3,
     borderBottomColor: "black"
+  },
+  text: {
+    fontFamily: "roboto",
+    fontSize: 20,
+    marginRight: 20
   }
 });
 
+//touchable
+//pickerstyle
+//helptext
+//scrollindicator
 //icons
 //validate
 //focus
