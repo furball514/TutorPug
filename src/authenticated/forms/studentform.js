@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Text,
   View,
@@ -7,46 +7,45 @@ import {
   Platform,
   ScrollView,
   Picker,
-  TouchableOpacity
-} from "react-native";
-import { LinearGradient } from "expo";
+  TouchableOpacity,
+} from 'react-native';
+import { LinearGradient } from 'expo';
 
 export default class StudentForm extends React.Component {
   state = {
     agePicker: false,
     genderPicker: false,
-    firstName: "",
-    lastName: "",
-    age: "10",
-    gender: null
+    firstName: '',
+    lastName: '',
+    age: '10',
+    gender: null,
   };
 
   static navigationOptions = {
     headerRight:
-      Platform.OS === "ios"
+      Platform.OS === 'ios'
         ? <TouchableOpacity>
             <Text
               selectable={false}
               allowFontScaling={false}
               style={{
-                color: "#5856d6",
-                fontWeight: "600",
+                color: '#5856d6',
+                fontWeight: '600',
                 marginRight: 13,
                 marginTop: 3,
-                fontSize: 19
-              }}
-            >
+                fontSize: 19,
+              }}>
               Done
             </Text>
           </TouchableOpacity>
-        : null
+        : null,
   };
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
     this.setState({
       firstName: params.data.firstName,
-      lastName: params.data.lastName
+      lastName: params.data.lastName,
     });
   }
 
@@ -55,11 +54,7 @@ export default class StudentForm extends React.Component {
       <ScrollView>
         <View style={[styles.border, { marginTop: 40 }]} />
         <View style={styles.section}>
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.label}
-          >
+          <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Profile Picture
           </Text>
           <Text allowFontScaling={false}> gty </Text>
@@ -71,11 +66,7 @@ export default class StudentForm extends React.Component {
         </Text>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.label}
-          >
+          <Text selectable={false} allowFontScaling={false} style={styles.label}>
             First Name
           </Text>
           <TextInput
@@ -92,11 +83,7 @@ export default class StudentForm extends React.Component {
         </View>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.label}
-          >
+          <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Last Name
           </Text>
           <TextInput
@@ -114,13 +101,8 @@ export default class StudentForm extends React.Component {
         <View style={styles.border} />
         <TouchableOpacity
           style={styles.section}
-          onPress={() => this.setState({ agePicker: !this.state.agePicker })}
-        >
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.label}
-          >
+          onPress={() => this.setState({ agePicker: !this.state.agePicker })}>
+          <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Age
           </Text>
           <Text allowFontScaling={false} selectable={false} style={styles.text}>
@@ -129,14 +111,12 @@ export default class StudentForm extends React.Component {
         </TouchableOpacity>
         {this.state.agePicker ? null : <View style={styles.border} />}
         {this.state.agePicker
-          ? <LinearGradient colors={["white", "#FDF760"]}>
+          ? <LinearGradient colors={['white', '#FDF760']}>
               <Picker
                 style={styles.picker}
                 itemStyle={styles.pickerItem}
                 selectedValue={this.state.age}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ age: itemValue })}
-              >
+                onValueChange={(itemValue, itemIndex) => this.setState({ age: itemValue })}>
                 <Picker.Item label="10" value="10" />
                 <Picker.Item label="11" value="11" />
               </Picker>
@@ -145,33 +125,23 @@ export default class StudentForm extends React.Component {
           : null}
         <TouchableOpacity
           style={styles.section}
-          onPress={() =>
-            this.setState({ genderPicker: !this.state.genderPicker })}
-        >
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.label}
-          >
+          onPress={() => this.setState({ genderPicker: !this.state.genderPicker })}>
+          <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Gender
           </Text>
           <Text allowFontScaling={false} selectable={false} style={styles.text}>
             {returnGender(this.state.gender)}
           </Text>
         </TouchableOpacity>
-        {this.state.genderPicker
-          ? null
-          : <View style={[styles.border, { marginBottom: 40 }]} />}
+        {this.state.genderPicker ? null : <View style={[styles.border, { marginBottom: 40 }]} />}
         {this.state.genderPicker
           ? <View>
-              <LinearGradient colors={["white", "#FDF760"]}>
+              <LinearGradient colors={['white', '#FDF760']}>
                 <Picker
                   style={styles.picker}
                   itemStyle={styles.pickerItem}
                   selectedValue={this.state.gender}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ gender: itemValue })}
-                >
+                  onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}>
                   <Picker.Item label="Female" value="female" />
                   <Picker.Item label="Male" value="male" />
                   <Picker.Item label="Leave blank" value={null} />
@@ -186,11 +156,7 @@ export default class StudentForm extends React.Component {
         </Text>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text
-            selectable={false}
-            allowFontScaling={false}
-            style={styles.label}
-          >
+          <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Location
           </Text>
           <Text allowFontScaling={false}>required</Text>
@@ -217,58 +183,58 @@ export default class StudentForm extends React.Component {
 
 const returnGender = gender => {
   if (gender == null) {
-    return "Leave blank";
+    return 'Leave blank';
   } else return `${gender.charAt(0).toUpperCase()}${gender.slice(1)}`;
 };
 
 const styles = StyleSheet.create({
   section: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     height: 65,
-    alignItems: "center"
+    alignItems: 'center',
   },
   label: {
-    fontWeight: "500",
-    color: "#0F5A43",
+    fontWeight: '500',
+    color: '#0F5A43',
     fontSize: 24,
-    marginLeft: 20
+    marginLeft: 20,
   },
   title: {
-    color: "#8a8a92",
+    color: '#8a8a92',
     fontSize: 16,
-    fontWeight: "400",
+    fontWeight: '400',
     marginBottom: 5,
-    marginLeft: 20
+    marginLeft: 20,
   },
   textInput: {
-    fontFamily: "roboto",
-    textAlign: "right",
+    fontFamily: 'roboto',
+    textAlign: 'right',
     fontSize: 22,
     height: 40,
     width: 140,
-    alignSelf: "center",
-    marginRight: 20
+    alignSelf: 'center',
+    marginRight: 20,
   },
   picker: {
     height: 125,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   pickerItem: {
     fontSize: 30,
-    color: "#0F5A43",
-    fontWeight: "500"
+    color: '#0F5A43',
+    fontWeight: '500',
   },
   border: {
     borderBottomWidth: 0.3,
-    borderBottomColor: "black"
+    borderBottomColor: 'black',
   },
   text: {
-    fontFamily: "roboto",
+    fontFamily: 'roboto',
     fontSize: 20,
-    marginRight: 20
-  }
+    marginRight: 20,
+  },
 });
 
 //picker bugs

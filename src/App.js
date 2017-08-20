@@ -1,28 +1,26 @@
-import React from "react";
-import Sentry from "sentry-expo";
-import { Text, TouchableOpacity, Platform } from "react-native";
-import { AppLoading, SecureStore } from "expo";
-import { Ionicons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
-import HomeScreen from "./home/homescreen";
-import LicenseView from "./home/license";
-import { SignedIn } from "./authenticated/signedin";
-import SignupView from "./authenticated/signup";
-import StudentForm from "./authenticated/forms/studentform";
-import TutorForm from "./authenticated/forms/tutorform";
-import { apiURL } from "./util/links";
-import cacheAssetsAsync from "./util/cacheAssets";
+import React from 'react';
+import Sentry from 'sentry-expo';
+import { Text, TouchableOpacity, Platform } from 'react-native';
+import { AppLoading, SecureStore } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
+import { StackNavigator } from 'react-navigation';
+import HomeScreen from './home/homescreen';
+import LicenseView from './home/license';
+import { SignedIn } from './authenticated/signedin';
+import SignupView from './authenticated/signup';
+import StudentForm from './authenticated/forms/studentform';
+import TutorForm from './authenticated/forms/tutorform';
+import { apiURL } from './util/links';
+import cacheAssetsAsync from './util/cacheAssets';
 
-Sentry.config(
-  "https://a91c8897643140638ddfd686dbf42476@sentry.io/189285"
-).install();
+Sentry.config('https://a91c8897643140638ddfd686dbf42476@sentry.io/189285').install();
 
 class App extends React.Component {
   componentWillMount() {
     if (!this.props.signedin)
       try {
-        SecureStore.deleteValueWithKeyAsync("TOKEN");
-        console.log("deleted");
+        SecureStore.deleteValueWithKeyAsync('TOKEN');
+        console.log('deleted');
       } catch (error) {
         console.error(error);
       }
@@ -35,19 +33,18 @@ class App extends React.Component {
           screen: HomeScreen,
           header: null,
           navigationOptions: {
-            header: null
-          }
+            header: null,
+          },
         },
         License: {
           screen: LicenseView,
           navigationOptions: ({ navigation }) => ({
             headerLeft:
-              Platform.OS === "ios"
+              Platform.OS === 'ios'
                 ? <TouchableOpacity
-                    accessible={true}
-                    accessibilityLabel={"dismiss"}
-                    onPress={() => navigation.goBack()}
-                  >
+                    accessible
+                    accessibilityLabel={'dismiss'}
+                    onPress={() => navigation.goBack()}>
                     <Ionicons
                       name="ios-close"
                       color="blue"
@@ -56,10 +53,9 @@ class App extends React.Component {
                     />
                   </TouchableOpacity>
                 : <TouchableOpacity
-                    accessible={true}
-                    accessibilityLabel={"dismiss"}
-                    onPress={() => navigation.goBack()}
-                  >
+                    accessible
+                    accessibilityLabel={'dismiss'}
+                    onPress={() => navigation.goBack()}>
                     <Ionicons
                       name="md-close"
                       size={32}
@@ -68,64 +64,61 @@ class App extends React.Component {
                     />
                   </TouchableOpacity>,
             headerTitle:
-              Platform.OS === "ios"
+              Platform.OS === 'ios'
                 ? <Text
                     allowFontScaling={false}
                     selectable={false}
-                    style={{ fontFamily: "roboto" }}
-                  >
+                    style={{ fontFamily: 'roboto' }}>
                     LICENSE
                   </Text>
                 : <Text
                     selectable={false}
                     style={{
-                      fontWeight: "400",
-                      color: "white",
+                      fontWeight: '400',
+                      color: 'white',
                       fontSize: 25,
                       marginLeft: 30,
-                      textAlign: "left",
-                      marginTop: 20
-                    }}
-                  >
+                      textAlign: 'left',
+                      marginTop: 20,
+                    }}>
                     License
                   </Text>,
             headerStyle:
-              Platform.OS === "ios"
-                ? { backgroundColor: "white" }
+              Platform.OS === 'ios'
+                ? { backgroundColor: 'white' }
                 : {
-                    backgroundColor: "#00897b",
+                    backgroundColor: '#00897b',
                     elevation: 4,
-                    height: 80
+                    height: 80,
                   },
-            headerPressColorAndroid: "white"
-          })
+            headerPressColorAndroid: 'white',
+          }),
         },
         Signedin: {
           screen: SignedIn,
           header: null,
           navigationOptions: {
             gesturesEnabled: false,
-            header: null
-          }
+            header: null,
+          },
         },
         Signup: {
           screen: SignupView,
           header: null,
           navigationOptions: {
             gesturesEnabled: false,
-            header: null
-          }
+            header: null,
+          },
         },
         Sform: {
           screen: StudentForm,
           navigationOptions: ({ navigation }) => ({
             headerLeft:
-              Platform.OS === "ios"
+              Platform.OS === 'ios'
                 ? <TouchableOpacity
-                    accessible={true}
-                    accessibilityLabel={"dismiss"}
-                    onPress={() => navigation.goBack()}
-                  >
+                    accessible
+                    accessibilityLabel={'dismiss'}
+                    onPress={() => navigation.goBack()}>
                     <Ionicons
                       name="ios-close"
                       color="blue"
@@ -134,10 +127,9 @@ class App extends React.Component {
                     />
                   </TouchableOpacity>
                 : <TouchableOpacity
-                    accessible={true}
-                    accessibilityLabel={"dismiss"}
-                    onPress={() => navigation.goBack()}
-                  >
+                    accessible
+                    accessibilityLabel={'dismiss'}
+                    onPress={() => navigation.goBack()}>
                     <Ionicons
                       name="md-close"
                       size={32}
@@ -146,48 +138,45 @@ class App extends React.Component {
                     />
                   </TouchableOpacity>,
             headerTitle:
-              Platform.OS === "ios"
+              Platform.OS === 'ios'
                 ? <Text
                     allowFontScaling={false}
                     selectable={false}
-                    style={{ fontFamily: "roboto", fontSize: 20 }}
-                  >
+                    style={{ fontFamily: 'roboto', fontSize: 20 }}>
                     Profile
                   </Text>
                 : <Text
                     selectable={false}
                     style={{
-                      fontWeight: "400",
-                      color: "white",
+                      fontWeight: '400',
+                      color: 'white',
                       fontSize: 25,
                       marginLeft: 30,
-                      textAlign: "left",
-                      marginTop: 20
-                    }}
-                  >
+                      textAlign: 'left',
+                      marginTop: 20,
+                    }}>
                     Profile
                   </Text>,
             headerStyle:
-              Platform.OS === "ios"
-                ? { backgroundColor: "white" }
+              Platform.OS === 'ios'
+                ? { backgroundColor: 'white' }
                 : {
-                    backgroundColor: "#00897b",
+                    backgroundColor: '#00897b',
                     elevation: 4,
-                    height: 80
+                    height: 80,
                   },
-            headerPressColorAndroid: "white"
-          })
+            headerPressColorAndroid: 'white',
+          }),
         },
         Tform: {
           screen: TutorForm,
           navigationOptions: ({ navigation }) => ({
             headerLeft:
-              Platform.OS === "ios"
+              Platform.OS === 'ios'
                 ? <TouchableOpacity
-                    accessible={true}
-                    accessibilityLabel={"dismiss"}
-                    onPress={() => navigation.goBack()}
-                  >
+                    accessible
+                    accessibilityLabel={'dismiss'}
+                    onPress={() => navigation.goBack()}>
                     <Ionicons
                       name="ios-close"
                       color="blue"
@@ -196,10 +185,9 @@ class App extends React.Component {
                     />
                   </TouchableOpacity>
                 : <TouchableOpacity
-                    accessible={true}
-                    accessibilityLabel={"dismiss"}
-                    onPress={() => navigation.goBack()}
-                  >
+                    accessible
+                    accessibilityLabel={'dismiss'}
+                    onPress={() => navigation.goBack()}>
                     <Ionicons
                       name="md-close"
                       size={32}
@@ -208,41 +196,39 @@ class App extends React.Component {
                     />
                   </TouchableOpacity>,
             headerTitle:
-              Platform.OS === "ios"
+              Platform.OS === 'ios'
                 ? <Text
                     allowFontScaling={false}
                     selectable={false}
-                    style={{ fontFamily: "roboto", fontSize: 20 }}
-                  >
+                    style={{ fontFamily: 'roboto', fontSize: 20 }}>
                     Profile
                   </Text>
                 : <Text
                     selectable={false}
                     style={{
-                      fontWeight: "400",
-                      color: "white",
+                      fontWeight: '400',
+                      color: 'white',
                       fontSize: 25,
                       marginLeft: 30,
-                      textAlign: "left",
-                      marginTop: 20
-                    }}
-                  >
+                      textAlign: 'left',
+                      marginTop: 20,
+                    }}>
                     Profile
                   </Text>,
             headerStyle:
-              Platform.OS === "ios"
-                ? { backgroundColor: "white" }
+              Platform.OS === 'ios'
+                ? { backgroundColor: 'white' }
                 : {
-                    backgroundColor: "#00897b",
+                    backgroundColor: '#00897b',
                     elevation: 4,
-                    height: 80
+                    height: 80,
                   },
-            headerPressColorAndroid: "white"
-          })
-        }
+            headerPressColorAndroid: 'white',
+          }),
+        },
       },
       {
-        initialRouteName: this.props.signedin ? "Signedin" : "Home"
+        initialRouteName: this.props.signedin ? 'Signedin' : 'Home',
       }
     );
     return <Root />;
@@ -252,17 +238,14 @@ class App extends React.Component {
 export default class AppView extends React.Component {
   state = {
     appIsReady: false,
-    signedin: false
+    signedin: false,
   };
 
   async _loadAssetsAsync() {
     try {
       await cacheAssetsAsync({
-        images: [require("./assets/icons/loading.png")],
-        fonts: [
-          Ionicons.font,
-          { roboto: require("./assets/fonts/Roboto-Regular.ttf") }
-        ]
+        images: [require('./assets/icons/loading.png')],
+        fonts: [Ionicons.font, { roboto: require('./assets/fonts/Roboto-Regular.ttf') }],
       });
     } catch (e) {
       console.log(e.message);
@@ -273,15 +256,15 @@ export default class AppView extends React.Component {
 
   async _isSignedin() {
     try {
-      const token = await SecureStore.getValueWithKeyAsync("TOKEN");
+      const token = await SecureStore.getValueWithKeyAsync('TOKEN');
       const response = await fetch(`${apiURL}/expiryCheck`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       const expiryCheck = await response.text();
-      if (token !== null && expiryCheck === "success") {
+      if (token !== null && expiryCheck === 'success') {
         this.setState({ signedin: true });
       }
     } catch (error) {
@@ -300,9 +283,7 @@ export default class AppView extends React.Component {
   }
 
   render() {
-    return this.state.appIsReady
-      ? <App signedin={this.state.signedin} />
-      : <AppLoading />;
+    return this.state.appIsReady ? <App signedin={this.state.signedin} /> : <AppLoading />;
   }
 }
 

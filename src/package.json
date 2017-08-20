@@ -14,5 +14,13 @@
     "react-native-modal": "^2.4.0",
     "react-navigation": "^1.0.0-beta.11",
     "sentry-expo": "~1.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-expo": "^6.0.0",
+    "prettier": "^1.5.3"
+  },
+  "eslintConfig": {
+    "extends": "expo/native"
   }
 }

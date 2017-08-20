@@ -1,26 +1,26 @@
-import React from "react";
-import { Text } from "react-native";
-import jwtDecoder from "jwt-decode";
-import { SecureStore } from "expo";
+import React from 'react';
+import { Text } from 'react-native';
+import jwtDecoder from 'jwt-decode';
+import { SecureStore } from 'expo';
 
 export class SignedIn extends React.Component {
   state = {
-    uniqueID: "",
-    provider: "",
-    exp: "",
-    iat: ""
+    uniqueID: '',
+    provider: '',
+    exp: '',
+    iat: '',
   };
 
-  async componentDidMount() {
+  async componentWillMount() {
     try {
-      const token = await SecureStore.getValueWithKeyAsync("TOKEN");
+      const token = await SecureStore.getValueWithKeyAsync('TOKEN');
       if (token !== null) {
         let decoded = jwtDecoder(token);
         this.setState({
           uniqueID: decoded.uniqueID,
           provider: decoded.provider,
           exp: decoded.exp,
-          iat: decoded.iat
+          iat: decoded.iat,
         });
       }
     } catch (error) {

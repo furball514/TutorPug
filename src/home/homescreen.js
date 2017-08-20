@@ -1,21 +1,13 @@
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Platform,
-  Linking
-} from "react-native";
-import { WebBrowser, SecureStore } from "expo";
-import { Ionicons } from "@expo/vector-icons";
-import { authenticationURL } from "../util/links";
-import Modal from "react-native-modal";
+import React from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Platform, Linking } from 'react-native';
+import { WebBrowser, SecureStore } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
+import Modal from 'react-native-modal';
+import { authenticationURL } from '../util/links';
 
 export default class HomeScreen extends React.Component {
   state = {
-    visibleModal: false
+    visibleModal: false,
   };
 
   toggleModal(visibleModal) {
@@ -25,15 +17,8 @@ export default class HomeScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     const iosDismiss = (
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => this.toggleModal(false)}
-      >
-        <Text
-          style={styles.cancelText}
-          allowFontScaling={false}
-          selectable={false}
-        >
+      <TouchableOpacity style={styles.cancelButton} onPress={() => this.toggleModal(false)}>
+        <Text style={styles.cancelText} allowFontScaling={false} selectable={false}>
           Cancel
         </Text>
       </TouchableOpacity>
@@ -45,8 +30,7 @@ export default class HomeScreen extends React.Component {
             style={styles.cancelText}
             allowFontScaling={false}
             selectable={false}
-            onPress={() => this.toggleModal(false)}
-          >
+            onPress={() => this.toggleModal(false)}>
             CANCEL
           </Text>
         </TouchableOpacity>
@@ -54,34 +38,23 @@ export default class HomeScreen extends React.Component {
     );
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigate("License")}>
-          <Text
-            allowFontScaling={false}
-            selectable={false}
-            style={styles.license}
-          >
+        <TouchableOpacity onPress={() => navigate('License')}>
+          <Text allowFontScaling={false} selectable={false} style={styles.license}>
             LICENSE
           </Text>
         </TouchableOpacity>
         <Image
-          source={require("./../assets/icons/loading.png")}
+          source={require('./../assets/icons/loading.png')}
           style={styles.logo}
-          accessible={true}
+          accessible
           accessibilityLabel="logo"
         />
 
-        <SignUp
-          navigation={this.props.navigation}
-          modalOpen={this.state.visibleModal}
-        />
+        <SignUp navigation={this.props.navigation} modalOpen={this.state.visibleModal} />
 
         <View style={styles.footer}>
           <TouchableOpacity onPress={() => this.toggleModal(true)}>
-            <Text
-              selectable={false}
-              allowFontScaling={false}
-              style={styles.signInText}
-            >
+            <Text selectable={false} allowFontScaling={false} style={styles.signInText}>
               Already have an account? Sign In.
             </Text>
           </TouchableOpacity>
@@ -89,12 +62,9 @@ export default class HomeScreen extends React.Component {
 
         <Modal isVisible={this.state.visibleModal} style={styles.modal}>
           <View style={styles.modalContent}>
-            <SignIn
-              navigation={this.props.navigation}
-              toggleModal={this.toggleModal.bind(this)}
-            />
+            <SignIn navigation={this.props.navigation} toggleModal={this.toggleModal.bind(this)} />
           </View>
-          {Platform.OS === "ios" ? iosDismiss : androidDismiss}
+          {Platform.OS === 'ios' ? iosDismiss : androidDismiss}
         </Modal>
       </View>
     );
@@ -103,37 +73,37 @@ export default class HomeScreen extends React.Component {
 
 class SignUp extends React.Component {
   componentDidMount() {
-    Linking.addEventListener("url", this._handleRedirect);
+    Linking.addEventListener('url', this._handleRedirect);
   }
 
   _handleRedirect = async ({ url }) => {
     const { navigate } = this.props.navigation;
     WebBrowser.dismissBrowser();
-    let token = url.split("/+redirect/?user=")[1];
+    let token = url.split('/+redirect/?user=')[1];
     let formatted;
     if (token)
       try {
-        let end = decodeURIComponent(token).lastIndexOf("}") + 1;
+        let end = decodeURIComponent(token).lastIndexOf('}') + 1;
         formatted = JSON.parse(
           decodeURIComponent(token)
             .slice(0, end)
-            .replace("#", "")
-            .replace("undefined", "")
-            .replace("%", "")
+            .replace('#', '')
+            .replace('undefined', '')
+            .replace('%', '')
         );
       } catch (error) {
         console.log(decodeURIComponent(token));
       } finally {
         try {
           try {
-            await SecureStore.setValueWithKeyAsync(formatted.token, "TOKEN");
+            await SecureStore.setValueWithKeyAsync(formatted.token, 'TOKEN');
           } catch (error) {
             console.error(error);
           }
-          if (formatted.status === "signin") {
-            navigate("Signedin");
-          } else if (formatted.status === "signup") {
-            navigate("Signup");
+          if (formatted.status === 'signin') {
+            navigate('Signedin');
+          } else if (formatted.status === 'signup') {
+            navigate('Signup');
           }
         } catch (error) {
           console.error(error);
@@ -147,68 +117,31 @@ class SignUp extends React.Component {
 
   componentWillUnmount() {
     try {
-      Linking.removeEventListener("url", this._handleRedirect);
+      Linking.removeEventListener('url', this._handleRedirect);
     } catch (error) {
       console.error(error);
     }
   }
 
   render() {
-    if (this.props.modalOpen)
-      Linking.removeEventListener("url", this._handleRedirect);
+    if (this.props.modalOpen) Linking.removeEventListener('url', this._handleRedirect);
     return (
       <View style={styles.signup}>
-        <TouchableOpacity
-          style={styles.fbButton}
-          onPress={() => this.authenticate("facebook")}
-        >
-          <Ionicons
-            name="logo-facebook"
-            color="white"
-            size={32}
-            style={styles.icons}
-          />
-          <Text
-            style={styles.signupText}
-            allowFontScaling={false}
-            selectable={false}
-          >
+        <TouchableOpacity style={styles.fbButton} onPress={() => this.authenticate('facebook')}>
+          <Ionicons name="logo-facebook" color="white" size={32} style={styles.icons} />
+          <Text style={styles.signupText} allowFontScaling={false} selectable={false}>
             Sign up with Facebook
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.gButton}
-          onPress={() => this.authenticate("google")}
-        >
-          <Ionicons
-            name="logo-google"
-            color="white"
-            size={28}
-            style={styles.icons}
-          />
-          <Text
-            style={styles.signupText}
-            allowFontScaling={false}
-            selectable={false}
-          >
-            Sign up with Google{" "}
+        <TouchableOpacity style={styles.gButton} onPress={() => this.authenticate('google')}>
+          <Ionicons name="logo-google" color="white" size={28} style={styles.icons} />
+          <Text style={styles.signupText} allowFontScaling={false} selectable={false}>
+            Sign up with Google{' '}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.lnButton}
-          onPress={() => this.authenticate("linkedin")}
-        >
-          <Ionicons
-            name="logo-linkedin"
-            color="white"
-            size={32}
-            style={styles.icons}
-          />
-          <Text
-            style={styles.signupText}
-            allowFontScaling={false}
-            selectable={false}
-          >
+        <TouchableOpacity style={styles.lnButton} onPress={() => this.authenticate('linkedin')}>
+          <Ionicons name="logo-linkedin" color="white" size={32} style={styles.icons} />
+          <Text style={styles.signupText} allowFontScaling={false} selectable={false}>
             Sign up with LinkedIn
           </Text>
         </TouchableOpacity>
@@ -219,37 +152,37 @@ class SignUp extends React.Component {
 
 class SignIn extends React.Component {
   componentDidMount() {
-    Linking.addEventListener("url", this._handleRedirect);
+    Linking.addEventListener('url', this._handleRedirect);
   }
 
   _handleRedirect = async ({ url }) => {
     const { navigate } = this.props.navigation;
     WebBrowser.dismissBrowser();
-    let token = url.split("/+redirect/?user=")[1];
+    let token = url.split('/+redirect/?user=')[1];
     let formatted;
     if (token)
       try {
-        let end = decodeURIComponent(token).lastIndexOf("}") + 1;
+        let end = decodeURIComponent(token).lastIndexOf('}') + 1;
         formatted = JSON.parse(
           decodeURIComponent(token)
             .slice(0, end)
-            .replace("#", "")
-            .replace("undefined", "")
-            .replace("%", "")
+            .replace('#', '')
+            .replace('undefined', '')
+            .replace('%', '')
         );
       } catch (error) {
         console.log(decodeURIComponent(token));
       } finally {
         try {
           try {
-            await SecureStore.setValueWithKeyAsync(formatted.token, "TOKEN");
+            await SecureStore.setValueWithKeyAsync(formatted.token, 'TOKEN');
           } catch (error) {
             console.error(error);
           }
-          if (formatted.status === "signin") {
-            navigate("Signedin");
-          } else if (formatted.status === "signup") {
-            navigate("Signup");
+          if (formatted.status === 'signin') {
+            navigate('Signedin');
+          } else if (formatted.status === 'signup') {
+            navigate('Signup');
           }
         } catch (error) {
           console.error(error);
@@ -263,77 +196,45 @@ class SignIn extends React.Component {
   };
 
   componentWillUnmount() {
-    Linking.removeEventListener("url", this._handleRedirect);
+    Linking.removeEventListener('url', this._handleRedirect);
   }
 
   render() {
     return (
       <View style={styles.signin}>
-        {Platform.OS === "ios"
+        {Platform.OS === 'ios'
           ? null
           : <Text style={styles.header} selectable={false}>
-              {" "}Sign In{" "}
+              {' '}Sign In{' '}
             </Text>}
-        {Platform.OS === "ios"
+        {Platform.OS === 'ios'
           ? null
           : <View
               style={{
                 width: 322,
-                borderBottomColor: "black",
-                borderBottomWidth: 0.4
+                borderBottomColor: 'black',
+                borderBottomWidth: 0.4,
               }}
             />}
         <TouchableOpacity
           style={styles.lightFbButton}
-          onPress={() => this.authenticate("facebook")}
-        >
-          <Ionicons
-            name="logo-facebook"
-            color="#3b5998"
-            size={32}
-            style={styles.icons}
-          />
-          <Text
-            style={styles.darkSignupText}
-            allowFontScaling={false}
-            selectable={false}
-          >
+          onPress={() => this.authenticate('facebook')}>
+          <Ionicons name="logo-facebook" color="#3b5998" size={32} style={styles.icons} />
+          <Text style={styles.darkSignupText} allowFontScaling={false} selectable={false}>
             Sign in with Facebook
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.lightGButton}
-          onPress={() => this.authenticate("google")}
-        >
-          <Ionicons
-            name="logo-google"
-            color="#dd4b39"
-            size={28}
-            style={styles.icons}
-          />
-          <Text
-            style={styles.darkSignupText}
-            allowFontScaling={false}
-            selectable={false}
-          >
-            Sign in with Google{" "}
+        <TouchableOpacity style={styles.lightGButton} onPress={() => this.authenticate('google')}>
+          <Ionicons name="logo-google" color="#dd4b39" size={28} style={styles.icons} />
+          <Text style={styles.darkSignupText} allowFontScaling={false} selectable={false}>
+            Sign in with Google{' '}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.lightLnButton}
-          onPress={() => this.authenticate("linkedin")}
-        >
-          <Ionicons
-            name="logo-linkedin"
-            color="#0077b5"
-            size={28}
-            style={styles.icons}
-          />
-          <Text
-            style={styles.darkSignupText}
-            allowFontScaling={false}
-            selectable={false}
-          >
+          onPress={() => this.authenticate('linkedin')}>
+          <Ionicons name="logo-linkedin" color="#0077b5" size={28} style={styles.icons} />
+          <Text style={styles.darkSignupText} allowFontScaling={false} selectable={false}>
             Sign in with LinkedIn
           </Text>
         </TouchableOpacity>
@@ -345,170 +246,170 @@ class SignIn extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0F5A43"
+    backgroundColor: '#0F5A43',
   },
   logo: {
     marginTop: 90,
     width: null,
-    resizeMode: "contain",
-    height: 78
+    resizeMode: 'contain',
+    height: 78,
   },
   license: {
     marginTop: 30,
-    alignSelf: "flex-end",
-    color: "white",
+    alignSelf: 'flex-end',
+    color: 'white',
     fontSize: 15,
     marginRight: 9,
-    fontFamily: "roboto"
+    fontFamily: 'roboto',
   },
   signInText: {
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: 15,
-    color: "#FDF760",
-    fontFamily: "roboto"
+    color: '#FDF760',
+    fontFamily: 'roboto',
   },
   signup: {
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    marginTop: 60
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 60,
   },
   signupText: {
-    color: "white",
+    color: 'white',
     fontSize: 23,
-    fontFamily: "roboto",
-    padding: 5
+    fontFamily: 'roboto',
+    padding: 5,
   },
   fbButton: {
     marginBottom: 10,
-    backgroundColor: "#3b5998",
+    backgroundColor: '#3b5998',
     height: 40,
-    width: Platform.OS === "ios" ? 270 : 274,
-    flexDirection: "row",
-    justifyContent: Platform.OS === "ios" ? "space-between" : "space-around",
+    width: Platform.OS === 'ios' ? 270 : 274,
+    flexDirection: 'row',
+    justifyContent: Platform.OS === 'ios' ? 'space-between' : 'space-around',
     borderRadius: 5,
-    marginRight: Platform.OS === "ios" ? 5 : 0
+    marginRight: Platform.OS === 'ios' ? 5 : 0,
   },
   gButton: {
     marginBottom: 10,
-    backgroundColor: "#dd4b39",
+    backgroundColor: '#dd4b39',
     height: 40,
     width: 274,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    borderRadius: 5
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderRadius: 5,
   },
   lnButton: {
-    backgroundColor: "#0077b5",
+    backgroundColor: '#0077b5',
     height: 40,
     width: 274,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    borderRadius: 5
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderRadius: 5,
   },
   icons: { padding: 6, marginBottom: 2 },
   footer: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 50
+    bottom: 50,
   },
   modal:
-    Platform.OS === "ios"
+    Platform.OS === 'ios'
       ? {
-          justifyContent: "flex-end"
+          justifyContent: 'flex-end',
         }
       : {
-          justifyContent: "center"
+          justifyContent: 'center',
         },
   modalContent:
-    Platform.OS === "ios"
+    Platform.OS === 'ios'
       ? {
-          backgroundColor: "white",
+          backgroundColor: 'white',
           borderRadius: 14,
           marginBottom: 10,
           padding: 22,
-          justifyContent: "center",
-          alignItems: "center",
-          borderColor: "rgba(0, 0, 0, 0.1)"
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderColor: 'rgba(0, 0, 0, 0.1)',
         }
       : {
-          backgroundColor: "white",
+          backgroundColor: 'white',
           padding: 22,
-          justifyContent: "center",
-          alignItems: "center",
-          borderBottomColor: "black",
-          borderBottomWidth: 0.4
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderBottomColor: 'black',
+          borderBottomWidth: 0.4,
         },
   cancelButton:
-    Platform.OS === "ios"
+    Platform.OS === 'ios'
       ? {
-          backgroundColor: "white",
-          borderRadius: 14
+          backgroundColor: 'white',
+          borderRadius: 14,
         }
-      : { backgroundColor: "white", height: 60, justifyContent: "center" },
+      : { backgroundColor: 'white', height: 60, justifyContent: 'center' },
   cancelText:
-    Platform.OS === "ios"
+    Platform.OS === 'ios'
       ? {
           padding: 10,
-          textAlign: "center",
-          color: "#5856d6",
+          textAlign: 'center',
+          color: '#5856d6',
           fontSize: 24,
-          fontWeight: "600",
-          backgroundColor: "transparent"
+          fontWeight: '600',
+          backgroundColor: 'transparent',
         }
       : {
           padding: 14,
-          textAlign: "right",
-          color: "#00897b",
+          textAlign: 'right',
+          color: '#00897b',
           fontSize: 24,
-          fontWeight: "400"
+          fontWeight: '400',
         },
   signin: {
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    alignContent: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    alignContent: 'center',
   },
   lightFbButton: {
     marginBottom: 10,
-    marginTop: Platform.OS === "ios" ? 0 : 10,
+    marginTop: Platform.OS === 'ios' ? 0 : 10,
     height: 40,
     width: 270,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomColor: "black",
-    marginRight: Platform.OS === "ios" ? 5 : 0,
-    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: 'black',
+    marginRight: Platform.OS === 'ios' ? 5 : 0,
+    borderBottomWidth: Platform.OS === 'ios' ? 0.1 : 0,
   },
   lightGButton: {
     marginBottom: 10,
     height: 40,
     width: 270,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    borderBottomColor: "black",
-    borderBottomWidth: Platform.OS === "ios" ? 0.1 : 0
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderBottomColor: 'black',
+    borderBottomWidth: Platform.OS === 'ios' ? 0.1 : 0,
   },
   lightLnButton: {
     height: 40,
     width: 270,
-    flexDirection: "row",
-    justifyContent: "space-around"
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   darkSignupText: {
     fontSize: 23,
-    fontFamily: "roboto",
-    padding: 5
+    fontFamily: 'roboto',
+    padding: 5,
   },
   header: {
-    alignSelf: "flex-start",
-    fontFamily: "roboto",
+    alignSelf: 'flex-start',
+    fontFamily: 'roboto',
     fontSize: 35,
     marginLeft: 12,
     marginBottom: 10,
-    paddingRight: 12
-  }
+    paddingRight: 12,
+  },
 });
 
 //background pr
