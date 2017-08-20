@@ -1,0 +1,70 @@
+Router.get('/saveIp/:ip',async (ctx) => {
+  let obj = JSON.parse(decodeURIComponent(ctx.params.ip));
+  try {
+   let match = await ip.findOne(obj);
+   if (!match) {
+     let data = new ip(obj);
+     console.log('added new ip');
+     await data.save();
+   }
+  }
+  catch (e) {
+    console.error(e);
+  }
+});
+
+async function checkIp (ctx) {
+  try {
+  let match = await ip.findOne({
+    $or: [
+      {ip: ctx.req.ip},
+      {ip: ctx.req.connection.remoteAddress},
+      {ip: ctx.req.socket.remoteAddress},
+      {ip: ctx.request.headers['x-forwarded-for'].split(',')[0]},
+      {ip: ctx.request.headers['x-forwarded-for']},
+    ]
+   });
+    if (match) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  catch (e) {
+   console.error(e);
+  }
+}
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const ipSchema = new Schema({
+  ip: String
+});
+
+const ip = mongoose.model('ip',ipSchema);
+module.exports = ip;
+
+`${config.refresh}fb_exchange_token=${token}`
+
+ const post_data = querystring.stringify({
+        client_id: process.env.GOOGLEAPPID,
+        client_secret: process.env.GOOGLEAPPSECRET,
+        refresh_token: refresh,
+        grant_type: "refresh_token"
+      });
+      const post_options = {
+        host: "www.googleapis.com",
+        path: "/oauth2/v4/token",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": Buffer.byteLength(post_data)
+        }
+      };
+      https.request(post_options, res => {
+        let body;
+        res.on("data", chunk => (body += chunk));
+        res.on("end", async () => {
+          let obj = {
