@@ -7,18 +7,21 @@ import {
   Platform,
   ScrollView,
   Picker,
+  Image,
   TouchableOpacity,
 } from 'react-native';
-import { LinearGradient } from 'expo';
+import { LinearGradient, ImagePicker } from 'expo';
 
 export default class StudentForm extends React.Component {
   state = {
+    imageError: false,
     agePicker: false,
     genderPicker: false,
     firstName: '',
     lastName: '',
     age: '10',
     gender: null,
+    dp: '',
   };
 
   static navigationOptions = {
@@ -46,19 +49,40 @@ export default class StudentForm extends React.Component {
     this.setState({
       firstName: params.data.firstName,
       lastName: params.data.lastName,
+      dp: params.data.dp,
     });
+  }
+
+  async pickImage() {
+    const imageReturned = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      exif: true,
+    });
+    if (!imageReturned.cancelled) {
+      this.setState({ dp: `data:image/jpg;base64,${imageReturned.base64}` });
+    }
   }
 
   render() {
     return (
       <ScrollView>
         <View style={[styles.border, { marginTop: 40 }]} />
-        <View style={styles.section}>
+        <TouchableOpacity style={styles.section} onPress={() => this.pickImage()}>
           <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Profile Picture
           </Text>
-          <Text allowFontScaling={false}> gty </Text>
-        </View>
+          <Image
+            style={styles.dp}
+            source={
+              this.state.imageError ? require('../../assets/icons/app.png') : { uri: this.state.dp }
+            }
+            onError={() => this.setState({ imageError: true })}
+            defaultSource={require('../../assets/icons/app.png')}
+          />
+          <Text allowFontScaling={false} selectable={false}>
+            Edit
+          </Text>
+        </TouchableOpacity>
         <View style={[styles.border, { marginBottom: 40 }]} />
 
         <Text allowFontScaling={false} selectable={false} style={styles.title}>
@@ -216,6 +240,14 @@ const styles = StyleSheet.create({
     width: 140,
     alignSelf: 'center',
     marginRight: 20,
+  },
+  dp: {
+    marginRight: 20,
+    borderRadius: 23,
+    height: 46,
+    width: 46,
+    borderColor: '#8a8a92',
+    borderWidth: 1,
   },
   picker: {
     height: 125,

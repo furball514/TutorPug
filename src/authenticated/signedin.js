@@ -12,7 +12,8 @@ export class SignedIn extends React.Component {
   };
 
   async componentWillMount() {
-    try {
+    SecureStore.deleteValueWithKeyAsync('TOKEN');
+    /*try {
       const token = await SecureStore.getValueWithKeyAsync('TOKEN');
       if (token !== null) {
         let decoded = jwtDecoder(token);
@@ -25,7 +26,7 @@ export class SignedIn extends React.Component {
       }
     } catch (error) {
       console.error(error);
-    }
+    }*/
   }
 
   render() {
