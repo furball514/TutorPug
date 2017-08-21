@@ -7,10 +7,12 @@ export default class SignupView extends React.Component {
   state = {
     data: {},
     token: '',
+    appReady: false,
   };
 
   async componentWillMount() {
     try {
+      const appReady = true;
       const token = await SecureStore.getValueWithKeyAsync('TOKEN');
       const response = await fetch(`${apiURL}/getAll`, {
         method: 'GET',
@@ -19,7 +21,7 @@ export default class SignupView extends React.Component {
         },
       });
       const data = await response.json();
-      this.setState({ data, token });
+      this.setState({ data, token, appReady });
     } catch (error) {
       console.error(error);
     }
@@ -27,40 +29,40 @@ export default class SignupView extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    return (
-      <View style={styles.container}>
-        <Text selectable={false} allowFontScaling={false} style={styles.greeting}>
-          Hi, {this.state.data.firstName}!
-        </Text>
-        <Text selectable={false} allowFontScaling={false} style={styles.question}>
-          Are you a ... ?
-        </Text>
-        <View style={styles.optionsContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              navigate('Sform', {
-                data: this.state.data,
-                token: this.state.token,
-              })}>
-            <Text selectable={false} allowFontScaling={false} style={styles.options}>
-              Student
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              navigate('Tform', {
-                data: this.state.data,
-                token: this.state.token,
-              })}>
-            <Text selectable={false} allowFontScaling={false} style={styles.options}>
-              Tutor
-            </Text>
-          </TouchableOpacity>
+    return this.state.appReady
+      ? <View style={styles.container}>
+          <Text selectable={false} allowFontScaling={false} style={styles.greeting}>
+            Hi, {this.state.data.firstName}!
+          </Text>
+          <Text selectable={false} allowFontScaling={false} style={styles.question}>
+            Are you a ... ?
+          </Text>
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                navigate('Sform', {
+                  data: this.state.data,
+                  token: this.state.token,
+                })}>
+              <Text selectable={false} allowFontScaling={false} style={styles.options}>
+                Student
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                navigate('Tform', {
+                  data: this.state.data,
+                  token: this.state.token,
+                })}>
+              <Text selectable={false} allowFontScaling={false} style={styles.options}>
+                Tutor
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    );
+      : null;
   }
 }
 
@@ -108,4 +110,3 @@ const styles = StyleSheet.create({
 
 //style
 //errorhandling
-//delay

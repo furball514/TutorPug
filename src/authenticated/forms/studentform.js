@@ -71,17 +71,24 @@ export default class StudentForm extends React.Component {
           <Text selectable={false} allowFontScaling={false} style={styles.label}>
             Profile Picture
           </Text>
-          <Image
-            style={styles.dp}
-            source={
-              this.state.imageError ? require('../../assets/icons/dp.png') : { uri: this.state.dp }
-            }
-            onError={() => this.setState({ imageError: true })}
-            defaultSource={require('../../assets/icons/dp.png')}
-          />
-          <Text allowFontScaling={false} selectable={false}>
-            Edit
-          </Text>
+          <View style={{ marginRight: 20 }}>
+            <Image
+              style={styles.dp}
+              source={
+                this.state.imageError
+                  ? require('../../assets/icons/dp.png')
+                  : { uri: this.state.dp }
+              }
+              onError={() => this.setState({ imageError: true })}
+              defaultSource={require('../../assets/icons/dp.png')}
+            />
+            <Text
+              allowFontScaling={false}
+              selectable={false}
+              style={{ color: 'blue', alignSelf: 'center' }}>
+              Edit
+            </Text>
+          </View>
         </TouchableOpacity>
         <View style={[styles.border, { marginBottom: 40 }]} />
 
@@ -90,8 +97,9 @@ export default class StudentForm extends React.Component {
         </Text>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text selectable={false} allowFontScaling={false} style={styles.label}>
-            First Name
+          <Text selectable={false} allowFontScaling={false} style={{ marginLeft: 20 }}>
+            <Text style={styles.label}>First Name</Text>
+            <Text style={{ color: 'red' }}>*</Text>
           </Text>
           <TextInput
             style={styles.textInput}
@@ -223,7 +231,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#0F5A43',
     fontSize: 24,
-    marginLeft: 20,
   },
   title: {
     color: '#8a8a92',
@@ -242,7 +249,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   dp: {
-    marginRight: 20,
     borderRadius: 23,
     height: 46,
     width: 46,
@@ -276,3 +282,4 @@ const styles = StyleSheet.create({
 //focus,touchable
 //inputs , defaults
 //style
+//asterisk
