@@ -244,7 +244,7 @@ export default class AppView extends React.Component {
   async _loadAssetsAsync() {
     try {
       await cacheAssetsAsync({
-        images: [require('./assets/icons/loading.png')],
+        images: [require('./assets/icons/loading.png'), require('./assets/icons/dp.png')],
         fonts: [Ionicons.font, { roboto: require('./assets/fonts/Roboto-Regular.ttf') }],
       });
     } catch (e) {

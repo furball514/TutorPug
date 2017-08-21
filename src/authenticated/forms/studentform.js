@@ -74,10 +74,10 @@ export default class StudentForm extends React.Component {
           <Image
             style={styles.dp}
             source={
-              this.state.imageError ? require('../../assets/icons/app.png') : { uri: this.state.dp }
+              this.state.imageError ? require('../../assets/icons/dp.png') : { uri: this.state.dp }
             }
             onError={() => this.setState({ imageError: true })}
-            defaultSource={require('../../assets/icons/app.png')}
+            defaultSource={require('../../assets/icons/dp.png')}
           />
           <Text allowFontScaling={false} selectable={false}>
             Edit
