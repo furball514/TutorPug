@@ -68,8 +68,13 @@ export default class StudentForm extends React.Component {
       <ScrollView>
         <View style={[styles.border, { marginTop: 40 }]} />
         <TouchableOpacity style={styles.section} onPress={() => this.pickImage()}>
-          <Text selectable={false} allowFontScaling={false} style={styles.label}>
-            Profile Picture
+          <Text style={styles.label}>
+            <Text selectable={false} allowFontScaling={false}>
+              Profile Picture
+            </Text>
+            <Text selectable={false} allowFontScaling={false} style={styles.required}>
+              *
+            </Text>
           </Text>
           <View style={{ marginRight: 20 }}>
             <Image
@@ -82,10 +87,7 @@ export default class StudentForm extends React.Component {
               onError={() => this.setState({ imageError: true })}
               defaultSource={require('../../assets/icons/dp.png')}
             />
-            <Text
-              allowFontScaling={false}
-              selectable={false}
-              style={{ color: 'blue', alignSelf: 'center' }}>
+            <Text allowFontScaling={false} selectable={false} style={styles.edit}>
               Edit
             </Text>
           </View>
@@ -97,9 +99,13 @@ export default class StudentForm extends React.Component {
         </Text>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text selectable={false} allowFontScaling={false} style={{ marginLeft: 20 }}>
-            <Text style={styles.label}>First Name</Text>
-            <Text style={{ color: 'red' }}>*</Text>
+          <Text style={styles.label}>
+            <Text allowFontScaling={false} selectable={false}>
+              First Name
+            </Text>
+            <Text allowFontScaling={false} selectable={false} style={styles.required}>
+              *
+            </Text>
           </Text>
           <TextInput
             style={styles.textInput}
@@ -115,8 +121,13 @@ export default class StudentForm extends React.Component {
         </View>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text selectable={false} allowFontScaling={false} style={styles.label}>
-            Last Name
+          <Text style={styles.label}>
+            <Text allowFontScaling={false} selectable={false}>
+              Last Name
+            </Text>
+            <Text allowFontScaling={false} selectable={false} style={styles.required}>
+              *
+            </Text>
           </Text>
           <TextInput
             style={styles.textInput}
@@ -134,8 +145,13 @@ export default class StudentForm extends React.Component {
         <TouchableOpacity
           style={styles.section}
           onPress={() => this.setState({ agePicker: !this.state.agePicker })}>
-          <Text selectable={false} allowFontScaling={false} style={styles.label}>
-            Age
+          <Text style={styles.label}>
+            <Text selectable={false} allowFontScaling={false}>
+              Age
+            </Text>
+            <Text selectable={false} allowFontScaling={false} style={styles.required}>
+              *
+            </Text>
           </Text>
           <Text allowFontScaling={false} selectable={false} style={styles.text}>
             {this.state.age}
@@ -188,8 +204,13 @@ export default class StudentForm extends React.Component {
         </Text>
         <View style={styles.border} />
         <View style={styles.section}>
-          <Text selectable={false} allowFontScaling={false} style={styles.label}>
-            Location
+          <Text style={styles.label}>
+            <Text selectable={false} allowFontScaling={false}>
+              Location
+            </Text>
+            <Text selectable={false} allowFontScaling={false} style={styles.required}>
+              *
+            </Text>
           </Text>
           <Text allowFontScaling={false}>required</Text>
         </View>
@@ -208,6 +229,27 @@ export default class StudentForm extends React.Component {
         <View style={styles.border} />
         <View style={styles.section} />
         <View style={[styles.border, { marginBottom: 40 }]} />
+
+        <Text style={styles.helpText}>
+          <Text selectable={false} allowFontScaling={false}>
+            Fields marked with:
+          </Text>
+          <Text selectable={false} allowFontScaling={false} style={styles.required}>
+            *
+          </Text>
+          <Text selectable={false} allowFontScaling={false}>
+            {'   '} are required
+          </Text>
+          <Text selectable={false} allowFontScaling={false} style={styles.recommended}>
+            *
+          </Text>
+          <Text selectable={false} allowFontScaling={false}>
+            {'   '} are recommended
+          </Text>
+          <Text selectable={false} allowFontScaling={false}>
+            Other fields are optional
+          </Text>
+        </Text>
       </ScrollView>
     );
   }
@@ -228,6 +270,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
+    marginLeft: 20,
     fontWeight: '500',
     color: '#0F5A43',
     fontSize: 24,
@@ -249,9 +292,9 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   dp: {
-    borderRadius: 23,
-    height: 46,
-    width: 46,
+    borderRadius: 22,
+    height: 44,
+    width: 44,
     borderColor: '#8a8a92',
     borderWidth: 1,
   },
@@ -272,6 +315,22 @@ const styles = StyleSheet.create({
     fontFamily: 'roboto',
     fontSize: 20,
     marginRight: 20,
+  },
+  required: {
+    color: '#ff3b30',
+  },
+  recommended: {
+    color: '#2042a6',
+  },
+  edit: {
+    color: 'blue',
+    alignSelf: 'center',
+    marginTop: 1,
+    fontSize: 10,
+  },
+  helpText: {
+    fontSize: 15,
+    fontFamily: 'roboto',
   },
 });
 
