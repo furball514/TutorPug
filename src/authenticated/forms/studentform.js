@@ -203,7 +203,7 @@ export default class StudentForm extends React.Component {
           LOCATION
         </Text>
         <View style={styles.border} />
-        <View style={styles.section}>
+        <TouchableOpacity style={styles.section}>
           <Text style={styles.label}>
             <Text selectable={false} allowFontScaling={false}>
               Location
@@ -212,8 +212,7 @@ export default class StudentForm extends React.Component {
               *
             </Text>
           </Text>
-          <Text allowFontScaling={false}>required</Text>
-        </View>
+        </TouchableOpacity>
         <View style={[styles.border, { marginBottom: 40 }]} />
 
         <Text allowFontScaling={false} selectable={false} style={styles.title}>
@@ -230,25 +229,20 @@ export default class StudentForm extends React.Component {
         <View style={styles.section} />
         <View style={[styles.border, { marginBottom: 40 }]} />
 
-        <Text style={styles.helpText}>
-          <Text selectable={false} allowFontScaling={false}>
-            Fields marked with:
-          </Text>
-          <Text selectable={false} allowFontScaling={false} style={styles.required}>
+        <View style={[styles.border, { marginBottom: 10 }]} />
+        <Text allowFontScaling={false} selectable={false} style={styles.helpText}>
+          {`Fields marked with: 
+        `}
+          <Text allowFontScaling={false} selectable={false} style={styles.required}>
             *
           </Text>
-          <Text selectable={false} allowFontScaling={false}>
-            {'   '} are required
-          </Text>
-          <Text selectable={false} allowFontScaling={false} style={styles.recommended}>
+          {`  are required
+        `}
+          <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
             *
           </Text>
-          <Text selectable={false} allowFontScaling={false}>
-            {'   '} are recommended
-          </Text>
-          <Text selectable={false} allowFontScaling={false}>
-            Other fields are optional
-          </Text>
+          {`  are recommended                         `}
+          {'               Other fields are optional.'}
         </Text>
       </ScrollView>
     );
@@ -329,8 +323,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   helpText: {
-    fontSize: 15,
-    fontFamily: 'roboto',
+    fontSize: 13,
+    marginLeft: 90,
   },
 });
 
@@ -341,4 +335,3 @@ const styles = StyleSheet.create({
 //focus,touchable
 //inputs , defaults
 //style
-//asterisk
