@@ -417,3 +417,4 @@ const styles = StyleSheet.create({
 //style,android
 //backbutton
 //fb?
+//encodeURI

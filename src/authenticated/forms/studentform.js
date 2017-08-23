@@ -22,6 +22,7 @@ export default class StudentForm extends React.Component {
     age: '10',
     gender: null,
     dp: '',
+    location: '',
   };
 
   static navigationOptions = {
@@ -211,6 +212,9 @@ export default class StudentForm extends React.Component {
             <Text selectable={false} allowFontScaling={false} style={styles.required}>
               *
             </Text>
+          </Text>
+          <Text allowFontScaling={false} selectable={false} style={styles.text}>
+            {this.state.location}
           </Text>
         </TouchableOpacity>
         <View style={[styles.border, { marginBottom: 40 }]} />
