@@ -11,9 +11,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { LinearGradient, ImagePicker } from 'expo';
+import Modal from 'react-native-modal';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class StudentForm extends React.Component {
   state = {
+    visibleModal: false,
     imageError: false,
     agePicker: false,
     genderPicker: false,
@@ -62,13 +65,29 @@ export default class StudentForm extends React.Component {
     if (!imageReturned.cancelled) {
       this.setState({ dp: `data:image/jpg;base64,${imageReturned.base64}` });
     }
+    this.toggleModal(false);
+  }
+
+  async takePhoto() {
+    const imageReturned = await ImagePicker.launchCameraAsync({
+      base64: true,
+      exif: true,
+    });
+    if (!imageReturned.cancelled) {
+      this.setState({ dp: `data:image/jpg;base64,${imageReturned.base64}` });
+    }
+    this.toggleModal(false);
+  }
+
+  toggleModal(visibleModal) {
+    this.setState({ visibleModal });
   }
 
   render() {
     return (
       <ScrollView>
         <View style={[styles.border, { marginTop: 40 }]} />
-        <TouchableOpacity style={styles.section} onPress={() => this.pickImage()}>
+        <TouchableOpacity style={styles.section} onPress={() => this.toggleModal(true)}>
           <Text style={styles.label}>
             <Text selectable={false} allowFontScaling={false}>
               Profile Picture
@@ -158,8 +177,8 @@ export default class StudentForm extends React.Component {
             {this.state.age}
           </Text>
         </TouchableOpacity>
-        {this.state.agePicker ? null : <View style={styles.border} />}
-        {this.state.agePicker
+        {this.state.agePicker && !this.state.genderPicker ? null : <View style={styles.border} />}
+        {this.state.agePicker && !this.state.genderPicker
           ? <LinearGradient colors={['white', '#FDF760']}>
               <Picker
                 style={styles.picker}
@@ -182,8 +201,10 @@ export default class StudentForm extends React.Component {
             {returnGender(this.state.gender)}
           </Text>
         </TouchableOpacity>
-        {this.state.genderPicker ? null : <View style={[styles.border, { marginBottom: 40 }]} />}
-        {this.state.genderPicker
+        {this.state.genderPicker && !this.state.agePicker
+          ? null
+          : <View style={[styles.border, { marginBottom: 40 }]} />}
+        {this.state.genderPicker && !this.state.agePicker
           ? <View>
               <LinearGradient colors={['white', '#FDF760']}>
                 <Picker
@@ -248,6 +269,43 @@ export default class StudentForm extends React.Component {
           {`  are recommended                         `}
           {'               Other fields are optional.'}
         </Text>
+        <Modal isVisible={this.state.visibleModal} style={styles.modal}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity onPress={() => this.takePhoto()} style={styles.button}>
+              <Ionicons
+                name="ios-camera-outline"
+                color="blue"
+                size={40}
+                style={[styles.center, { marginLeft: 20 }]}
+              />
+              <Text
+                allowFontScaling={false}
+                selectable={false}
+                style={[styles.center, styles.text]}>
+                Camera
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.pickImage()} style={styles.button}>
+              <Ionicons
+                name="ios-photos-outline"
+                color="blue"
+                size={35}
+                style={[styles.center, { marginLeft: 20 }]}
+              />
+              <Text
+                allowFontScaling={false}
+                selectable={false}
+                style={[styles.center, styles.text]}>
+                Photo Library
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.cancelButton} onPress={() => this.toggleModal(false)}>
+            <Text style={styles.cancelText} allowFontScaling={false} selectable={false}>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+        </Modal>
       </ScrollView>
     );
   }
@@ -305,6 +363,27 @@ const styles = StyleSheet.create({
     color: '#0F5A43',
     fontWeight: '500',
   },
+  modal: {
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 14,
+    marginBottom: 10,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  cancelButton: {
+    backgroundColor: 'white',
+    borderRadius: 14,
+  },
+  cancelText: {
+    padding: 10,
+    textAlign: 'center',
+    color: '#5856d6',
+    fontSize: 24,
+    fontWeight: '600',
+    backgroundColor: 'transparent',
+  },
   border: {
     borderBottomWidth: 0.3,
     borderBottomColor: 'black',
@@ -330,6 +409,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginLeft: 90,
   },
+  button: {
+    height: 50,
+    borderBottomColor: 'black',
+    borderBottomWidth: 0.3,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  center: {
+    alignSelf: 'center',
+  },
 });
 
 //picker bugs
@@ -339,3 +428,5 @@ const styles = StyleSheet.create({
 //focus,touchable
 //inputs , defaults
 //style
+//modal, props
+//fs modal location
