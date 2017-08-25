@@ -10,14 +10,16 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { LinearGradient, ImagePicker } from 'expo';
+import { LinearGradient, ImagePicker, MapView } from 'expo';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
+import { GooglePlacesAutocomplete } from '../../util/react-native-google-places-autocomplete/GooglePlacesAutocomplete';
 
 export default class StudentForm extends React.Component {
   state = {
     visibleModal: false,
     imageError: false,
+    locationPicker: false,
     agePicker: false,
     genderPicker: false,
     firstName: '',
@@ -225,7 +227,9 @@ export default class StudentForm extends React.Component {
           LOCATION
         </Text>
         <View style={styles.border} />
-        <TouchableOpacity style={styles.section}>
+        <TouchableOpacity
+          style={styles.section}
+          onPress={() => this.setState({ locationPicker: true })}>
           <Text style={styles.label}>
             <Text selectable={false} allowFontScaling={false}>
               Location
@@ -305,6 +309,86 @@ export default class StudentForm extends React.Component {
               Cancel
             </Text>
           </TouchableOpacity>
+        </Modal>
+        <Modal isVisible={this.state.locationPicker} style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: '#edf0f5',
+            }}>
+            <View
+              style={{
+                alignSelf: 'stretch',
+                height: 40,
+                backgroundColor: '#eff0f5',
+              }}>
+              <TouchableOpacity onPress={() => this.setState({ locationPicker: false })}>
+                <Text
+                  selectable={false}
+                  allowFontScaling={false}
+                  style={{
+                    color: '#5856d6',
+                    fontWeight: '600',
+                    marginRight: 13,
+                    marginTop: 10,
+                    fontSize: 19,
+                    textAlign: 'right',
+                  }}>
+                  Done
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <GooglePlacesAutocomplete
+              placeholder="Search..."
+              minLength={2}
+              autoFocus={false}
+              returnKeyType={'search'}
+              listViewDisplayed="auto"
+              fetchDetails
+              renderDescription={row => row.description}
+              onPress={(data, details = null) => {
+                console.log(data);
+                console.log(details);
+              }}
+              getDefaultValue={() => {
+                return '';
+              }}
+              query={{
+                key: 'YOUR API KEY',
+                language: 'en',
+                types: '(cities)',
+              }}
+              styles={{
+                description: {
+                  fontWeight: 'bold',
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb',
+                },
+              }}
+              currentLocation
+              currentLocationLabel="Current location"
+              nearbyPlacesAPI="GooglePlacesSearch"
+              GoogleReverseGeocodingQuery={{}}
+              GooglePlacesSearchQuery={{
+                rankby: 'distance',
+                types: 'food',
+              }}
+              filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
+              debounce={200}
+            />
+          </View>
+          <MapView
+            style={{
+              flex: 1,
+            }}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
         </Modal>
       </ScrollView>
     );
@@ -430,3 +514,4 @@ const styles = StyleSheet.create({
 //style
 //modal, props
 //fs modal location
+// students,tutors - map
