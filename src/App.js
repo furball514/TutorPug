@@ -305,6 +305,7 @@ export default class AppView extends React.Component {
 //statusbar
 //svg
 //imgur
+//googplaces fontscaling
 
 //log err
 //sentry

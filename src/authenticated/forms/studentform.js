@@ -9,11 +9,15 @@ import {
   Picker,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { LinearGradient, ImagePicker, MapView } from 'expo';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
-import { GooglePlacesAutocomplete } from '../../util/react-native-google-places-autocomplete/GooglePlacesAutocomplete';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { apple, retro, aubergine } from '../../util/mapStyles';
+
+const { width, height } = Dimensions.get('window');
 
 export default class StudentForm extends React.Component {
   state = {
@@ -86,6 +90,7 @@ export default class StudentForm extends React.Component {
   }
 
   render() {
+    const ASPECT_RATIO = width / height;
     return (
       <ScrollView>
         <View style={[styles.border, { marginTop: 40 }]} />
@@ -273,7 +278,13 @@ export default class StudentForm extends React.Component {
           {`  are recommended                         `}
           {'               Other fields are optional.'}
         </Text>
-        <Modal isVisible={this.state.visibleModal} style={styles.modal}>
+        <Modal
+          isVisible={this.state.visibleModal}
+          style={styles.modal}
+          backdropOpacity={0.3}
+          animationInTiming={200}
+          animationOutTiming={200}
+          onBackdropPress={() => this.toggleModal(false)}>
           <View style={styles.modalContent}>
             <TouchableOpacity onPress={() => this.takePhoto()} style={styles.button}>
               <Ionicons
@@ -310,7 +321,12 @@ export default class StudentForm extends React.Component {
             </Text>
           </TouchableOpacity>
         </Modal>
-        <Modal isVisible={this.state.locationPicker} style={{ flex: 1 }}>
+        <Modal
+          isVisible={this.state.locationPicker}
+          style={{ flex: 1 }}
+          backdropOpacity={0.3}
+          animationIn="bounceIn"
+          animationOut="slideOutDown">
           <View
             style={{
               flex: 1,
@@ -340,42 +356,26 @@ export default class StudentForm extends React.Component {
             </View>
             <GooglePlacesAutocomplete
               placeholder="Search..."
-              minLength={2}
               autoFocus={false}
-              returnKeyType={'search'}
+              returnKeyType="search"
               listViewDisplayed="auto"
               fetchDetails
               renderDescription={row => row.description}
               onPress={(data, details = null) => {
-                console.log(data);
-                console.log(details);
+                console.log(`data: ${JSON.stringify(data)}`);
+                console.log(`details: ${JSON.stringify(details)}`);
               }}
-              getDefaultValue={() => {
-                return '';
-              }}
+              getDefaultValue={() => ''}
               query={{
-                key: 'YOUR API KEY',
+                key: '',
                 language: 'en',
-                types: '(cities)',
               }}
               styles={{
                 description: {
-                  fontWeight: 'bold',
-                },
-                predefinedPlacesDescription: {
-                  color: '#1faadb',
+                  fontFamily: 'roboto',
                 },
               }}
-              currentLocation
-              currentLocationLabel="Current location"
               nearbyPlacesAPI="GooglePlacesSearch"
-              GoogleReverseGeocodingQuery={{}}
-              GooglePlacesSearchQuery={{
-                rankby: 'distance',
-                types: 'food',
-              }}
-              filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
-              debounce={200}
             />
           </View>
           <MapView
@@ -383,12 +383,20 @@ export default class StudentForm extends React.Component {
               flex: 1,
             }}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: '',
+              longitude: '',
               latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              longitudeDelta: 0.0922 * ASPECT_RATIO,
             }}
-          />
+            provider={MapView.PROVIDER_GOOGLE}
+            customMapStyle={returnMapStyle()}>
+            <MapView.Marker
+              coordinate={{
+                latitude: '',
+                longitude: '',
+              }}
+            />
+          </MapView>
         </Modal>
       </ScrollView>
     );
@@ -399,6 +407,15 @@ const returnGender = gender => {
   if (gender == null) {
     return 'Leave blank';
   } else return `${gender.charAt(0).toUpperCase()}${gender.slice(1)}`;
+};
+
+const returnMapStyle = () => {
+  const hr = new Date().getHours();
+  if (hr < 18) {
+    return Platform.OS === 'ios' ? apple : retro;
+  } else {
+    return aubergine;
+  }
 };
 
 const styles = StyleSheet.create({
