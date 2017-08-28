@@ -10,8 +10,9 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
-import { LinearGradient, ImagePicker, MapView } from 'expo';
+import { LinearGradient, ImagePicker, MapView, Location } from 'expo';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -21,6 +22,8 @@ const { width, height } = Dimensions.get('window');
 
 export default class StudentForm extends React.Component {
   state = {
+    location: '',
+    appReady: false,
     visibleModal: false,
     imageError: false,
     locationPicker: false,
@@ -31,7 +34,10 @@ export default class StudentForm extends React.Component {
     age: '10',
     gender: null,
     dp: '',
-    location: '',
+    geocode: {
+      latitude: 0,
+      longitude: 0,
+    },
   };
 
   static navigationOptions = {
@@ -54,12 +60,23 @@ export default class StudentForm extends React.Component {
         : null,
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     const { params } = this.props.navigation.state;
+    await Location.setApiKey('');
+    const geocode = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+    });
+    const location = await Location.reverseGeocodeAsync({
+      latitude: geocode.coords.latitude,
+      longitude: geocode.coords.longitude,
+    });
     this.setState({
       firstName: params.data.firstName,
       lastName: params.data.lastName,
       dp: params.data.dp,
+      geocode: geocode.coords,
+      appReady: true,
+      location,
     });
   }
 
@@ -91,315 +108,318 @@ export default class StudentForm extends React.Component {
 
   render() {
     const ASPECT_RATIO = width / height;
-    return (
-      <ScrollView>
-        <View style={[styles.border, { marginTop: 40 }]} />
-        <TouchableOpacity style={styles.section} onPress={() => this.toggleModal(true)}>
-          <Text style={styles.label}>
-            <Text selectable={false} allowFontScaling={false}>
-              Profile Picture
+    return this.state.appReady
+      ? <ScrollView>
+          <View style={[styles.border, { marginTop: 40 }]} />
+          <TouchableOpacity style={styles.section} onPress={() => this.toggleModal(true)}>
+            <Text style={styles.label}>
+              <Text selectable={false} allowFontScaling={false}>
+                Profile Picture
+              </Text>
+              <Text selectable={false} allowFontScaling={false} style={styles.required}>
+                *
+              </Text>
             </Text>
-            <Text selectable={false} allowFontScaling={false} style={styles.required}>
-              *
-            </Text>
-          </Text>
-          <View style={{ marginRight: 20 }}>
-            <Image
-              style={styles.dp}
-              source={
-                this.state.imageError
-                  ? require('../../assets/icons/dp.png')
-                  : { uri: this.state.dp }
-              }
-              onError={() => this.setState({ imageError: true })}
-              defaultSource={require('../../assets/icons/dp.png')}
-            />
-            <Text allowFontScaling={false} selectable={false} style={styles.edit}>
-              Edit
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <View style={[styles.border, { marginBottom: 40 }]} />
+            <View style={{ marginRight: 20 }}>
+              <Image
+                style={styles.dp}
+                source={
+                  this.state.imageError
+                    ? require('../../assets/icons/dp.png')
+                    : { uri: this.state.dp }
+                }
+                onError={() => this.setState({ imageError: true })}
+                defaultSource={require('../../assets/icons/dp.png')}
+              />
+              <Text allowFontScaling={false} selectable={false} style={styles.edit}>
+                Edit
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <View style={[styles.border, { marginBottom: 40 }]} />
 
-        <Text allowFontScaling={false} selectable={false} style={styles.title}>
-          BASIC INFO
-        </Text>
-        <View style={styles.border} />
-        <View style={styles.section}>
-          <Text style={styles.label}>
-            <Text allowFontScaling={false} selectable={false}>
-              First Name
-            </Text>
-            <Text allowFontScaling={false} selectable={false} style={styles.required}>
-              *
-            </Text>
+          <Text allowFontScaling={false} selectable={false} style={styles.title}>
+            BASIC INFO
           </Text>
-          <TextInput
-            style={styles.textInput}
-            value={this.state.firstName}
-            autoCapitalize="words"
-            maxLength={40}
-            placeholder="required"
-            placeholderTextColor="#8a8a92"
-            returnKeyType="next"
-            selectionColor="#FDF760"
-            onChangeText={firstName => this.setState({ firstName })}
-          />
-        </View>
-        <View style={styles.border} />
-        <View style={styles.section}>
-          <Text style={styles.label}>
-            <Text allowFontScaling={false} selectable={false}>
-              Last Name
+          <View style={styles.border} />
+          <View style={styles.section}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                First Name
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.required}>
+                *
+              </Text>
             </Text>
-            <Text allowFontScaling={false} selectable={false} style={styles.required}>
-              *
+            <TextInput
+              style={styles.textInput}
+              value={this.state.firstName}
+              autoCapitalize="words"
+              maxLength={40}
+              placeholder="required"
+              placeholderTextColor="#8a8a92"
+              returnKeyType="next"
+              selectionColor="#FDF760"
+              onChangeText={firstName => this.setState({ firstName })}
+            />
+          </View>
+          <View style={styles.border} />
+          <View style={styles.section}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                Last Name
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.required}>
+                *
+              </Text>
             </Text>
-          </Text>
-          <TextInput
-            style={styles.textInput}
-            value={this.state.lastName}
-            autoCapitalize="words"
-            maxLength={40}
-            placeholder="required"
-            placeholderTextColor="#8a8a92"
-            returnKeyType="next"
-            selectionColor="#FDF760"
-            onChangeText={lastName => this.setState({ lastName })}
-          />
-        </View>
-        <View style={styles.border} />
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => this.setState({ agePicker: !this.state.agePicker })}>
-          <Text style={styles.label}>
-            <Text selectable={false} allowFontScaling={false}>
-              Age
+            <TextInput
+              style={styles.textInput}
+              value={this.state.lastName}
+              autoCapitalize="words"
+              maxLength={40}
+              placeholder="required"
+              placeholderTextColor="#8a8a92"
+              returnKeyType="next"
+              selectionColor="#FDF760"
+              onChangeText={lastName => this.setState({ lastName })}
+            />
+          </View>
+          <View style={styles.border} />
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ agePicker: !this.state.agePicker })}>
+            <Text style={styles.label}>
+              <Text selectable={false} allowFontScaling={false}>
+                Age
+              </Text>
+              <Text selectable={false} allowFontScaling={false} style={styles.required}>
+                *
+              </Text>
             </Text>
-            <Text selectable={false} allowFontScaling={false} style={styles.required}>
-              *
+            <Text allowFontScaling={false} selectable={false} style={styles.text}>
+              {this.state.age}
             </Text>
-          </Text>
-          <Text allowFontScaling={false} selectable={false} style={styles.text}>
-            {this.state.age}
-          </Text>
-        </TouchableOpacity>
-        {this.state.agePicker && !this.state.genderPicker ? null : <View style={styles.border} />}
-        {this.state.agePicker && !this.state.genderPicker
-          ? <LinearGradient colors={['white', '#FDF760']}>
-              <Picker
-                style={styles.picker}
-                itemStyle={styles.pickerItem}
-                selectedValue={this.state.age}
-                onValueChange={(itemValue, itemIndex) => this.setState({ age: itemValue })}>
-                <Picker.Item label="10" value="10" />
-                <Picker.Item label="11" value="11" />
-              </Picker>
-              <View style={styles.border} />
-            </LinearGradient>
-          : null}
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => this.setState({ genderPicker: !this.state.genderPicker })}>
-          <Text selectable={false} allowFontScaling={false} style={styles.label}>
-            Gender
-          </Text>
-          <Text allowFontScaling={false} selectable={false} style={styles.text}>
-            {returnGender(this.state.gender)}
-          </Text>
-        </TouchableOpacity>
-        {this.state.genderPicker && !this.state.agePicker
-          ? null
-          : <View style={[styles.border, { marginBottom: 40 }]} />}
-        {this.state.genderPicker && !this.state.agePicker
-          ? <View>
-              <LinearGradient colors={['white', '#FDF760']}>
+          </TouchableOpacity>
+          {this.state.agePicker && !this.state.genderPicker ? null : <View style={styles.border} />}
+          {this.state.agePicker && !this.state.genderPicker
+            ? <LinearGradient colors={['white', '#FDF760']}>
                 <Picker
                   style={styles.picker}
                   itemStyle={styles.pickerItem}
-                  selectedValue={this.state.gender}
-                  onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}>
-                  <Picker.Item label="Female" value="female" />
-                  <Picker.Item label="Male" value="male" />
-                  <Picker.Item label="Leave blank" value={null} />
+                  selectedValue={this.state.age}
+                  onValueChange={(itemValue, itemIndex) => this.setState({ age: itemValue })}>
+                  <Picker.Item label="10" value="10" />
+                  <Picker.Item label="11" value="11" />
                 </Picker>
+                <View style={styles.border} />
               </LinearGradient>
-              <View style={[styles.border, { marginBottom: 40 }]} />
-            </View>
-          : null}
-
-        <Text allowFontScaling={false} selectable={false} style={styles.title}>
-          LOCATION
-        </Text>
-        <View style={styles.border} />
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => this.setState({ locationPicker: true })}>
-          <Text style={styles.label}>
-            <Text selectable={false} allowFontScaling={false}>
-              Location
+            : null}
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ genderPicker: !this.state.genderPicker })}>
+            <Text selectable={false} allowFontScaling={false} style={styles.label}>
+              Gender
             </Text>
-            <Text selectable={false} allowFontScaling={false} style={styles.required}>
-              *
-            </Text>
-          </Text>
-          <Text allowFontScaling={false} selectable={false} style={styles.text}>
-            {this.state.location}
-          </Text>
-        </TouchableOpacity>
-        <View style={[styles.border, { marginBottom: 40 }]} />
-
-        <Text allowFontScaling={false} selectable={false} style={styles.title}>
-          EDUCATION
-        </Text>
-        <View style={styles.border} />
-        <View style={styles.section} />
-        <View style={[styles.border, { marginBottom: 40 }]} />
-
-        <Text allowFontScaling={false} selectable={false} style={styles.title}>
-          CONTACT
-        </Text>
-        <View style={styles.border} />
-        <View style={styles.section} />
-        <View style={[styles.border, { marginBottom: 40 }]} />
-
-        <View style={[styles.border, { marginBottom: 10 }]} />
-        <Text allowFontScaling={false} selectable={false} style={styles.helpText}>
-          {`Fields marked with: 
-        `}
-          <Text allowFontScaling={false} selectable={false} style={styles.required}>
-            *
-          </Text>
-          {`  are required
-        `}
-          <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
-            *
-          </Text>
-          {`  are recommended                         `}
-          {'               Other fields are optional.'}
-        </Text>
-        <Modal
-          isVisible={this.state.visibleModal}
-          style={styles.modal}
-          backdropOpacity={0.3}
-          animationInTiming={200}
-          animationOutTiming={200}
-          onBackdropPress={() => this.toggleModal(false)}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity onPress={() => this.takePhoto()} style={styles.button}>
-              <Ionicons
-                name="ios-camera-outline"
-                color="blue"
-                size={40}
-                style={[styles.center, { marginLeft: 20 }]}
-              />
-              <Text
-                allowFontScaling={false}
-                selectable={false}
-                style={[styles.center, styles.text]}>
-                Camera
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.pickImage()} style={styles.button}>
-              <Ionicons
-                name="ios-photos-outline"
-                color="blue"
-                size={35}
-                style={[styles.center, { marginLeft: 20 }]}
-              />
-              <Text
-                allowFontScaling={false}
-                selectable={false}
-                style={[styles.center, styles.text]}>
-                Photo Library
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.cancelButton} onPress={() => this.toggleModal(false)}>
-            <Text style={styles.cancelText} allowFontScaling={false} selectable={false}>
-              Cancel
+            <Text allowFontScaling={false} selectable={false} style={styles.text}>
+              {returnGender(this.state.gender)}
             </Text>
           </TouchableOpacity>
-        </Modal>
-        <Modal
-          isVisible={this.state.locationPicker}
-          style={{ flex: 1 }}
-          backdropOpacity={0.3}
-          animationIn="bounceIn"
-          animationOut="slideOutDown">
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#edf0f5',
-            }}>
-            <View
-              style={{
-                alignSelf: 'stretch',
-                height: 40,
-                backgroundColor: '#eff0f5',
-              }}>
-              <TouchableOpacity onPress={() => this.setState({ locationPicker: false })}>
+          {this.state.genderPicker && !this.state.agePicker
+            ? null
+            : <View style={[styles.border, { marginBottom: 40 }]} />}
+          {this.state.genderPicker && !this.state.agePicker
+            ? <View>
+                <LinearGradient colors={['white', '#FDF760']}>
+                  <Picker
+                    style={styles.picker}
+                    itemStyle={styles.pickerItem}
+                    selectedValue={this.state.gender}
+                    onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}>
+                    <Picker.Item label="Female" value="female" />
+                    <Picker.Item label="Male" value="male" />
+                    <Picker.Item label="Leave blank" value={null} />
+                  </Picker>
+                </LinearGradient>
+                <View style={[styles.border, { marginBottom: 40 }]} />
+              </View>
+            : null}
+
+          <Text allowFontScaling={false} selectable={false} style={styles.title}>
+            LOCATION
+          </Text>
+          <View style={styles.border} />
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ locationPicker: true })}>
+            <Text style={styles.label}>
+              <Text selectable={false} allowFontScaling={false}>
+                Location
+              </Text>
+              <Text selectable={false} allowFontScaling={false} style={styles.required}>
+                *
+              </Text>
+            </Text>
+            <Text allowFontScaling={false} selectable={false} style={styles.text}>
+              {JSON.stringify(this.state.location)}
+            </Text>
+          </TouchableOpacity>
+          <View style={[styles.border, { marginBottom: 40 }]} />
+
+          <Text allowFontScaling={false} selectable={false} style={styles.title}>
+            EDUCATION
+          </Text>
+          <View style={styles.border} />
+          <View style={styles.section} />
+          <View style={[styles.border, { marginBottom: 40 }]} />
+
+          <Text allowFontScaling={false} selectable={false} style={styles.title}>
+            CONTACT
+          </Text>
+          <View style={styles.border} />
+          <View style={styles.section} />
+          <View style={[styles.border, { marginBottom: 40 }]} />
+
+          <View style={[styles.border, { marginBottom: 10 }]} />
+          <Text allowFontScaling={false} selectable={false} style={styles.helpText}>
+            {`Fields marked with: 
+        `}
+            <Text allowFontScaling={false} selectable={false} style={styles.required}>
+              *
+            </Text>
+            {`  are required
+        `}
+            <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
+              *
+            </Text>
+            {`  are recommended                         `}
+            {'               Other fields are optional.'}
+          </Text>
+          <Modal
+            isVisible={this.state.visibleModal}
+            style={styles.modal}
+            backdropOpacity={0.3}
+            animationInTiming={200}
+            animationOutTiming={200}
+            onBackdropPress={() => this.toggleModal(false)}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity onPress={() => this.takePhoto()} style={styles.button}>
+                <Ionicons
+                  name="ios-camera-outline"
+                  color="blue"
+                  size={40}
+                  style={[styles.center, { marginLeft: 20 }]}
+                />
                 <Text
-                  selectable={false}
                   allowFontScaling={false}
-                  style={{
-                    color: '#5856d6',
-                    fontWeight: '600',
-                    marginRight: 13,
-                    marginTop: 10,
-                    fontSize: 19,
-                    textAlign: 'right',
-                  }}>
-                  Done
+                  selectable={false}
+                  style={[styles.center, styles.text]}>
+                  Camera
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.pickImage()} style={styles.button}>
+                <Ionicons
+                  name="ios-photos-outline"
+                  color="blue"
+                  size={35}
+                  style={[styles.center, { marginLeft: 20 }]}
+                />
+                <Text
+                  allowFontScaling={false}
+                  selectable={false}
+                  style={[styles.center, styles.text]}>
+                  Photo Library
                 </Text>
               </TouchableOpacity>
             </View>
-            <GooglePlacesAutocomplete
-              placeholder="Search..."
-              autoFocus={false}
-              returnKeyType="search"
-              listViewDisplayed="auto"
-              fetchDetails
-              renderDescription={row => row.description}
-              onPress={(data, details = null) => {
-                console.log(`data: ${JSON.stringify(data)}`);
-                console.log(`details: ${JSON.stringify(details)}`);
+            <TouchableOpacity style={styles.cancelButton} onPress={() => this.toggleModal(false)}>
+              <Text style={styles.cancelText} allowFontScaling={false} selectable={false}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </Modal>
+          <Modal
+            isVisible={this.state.locationPicker}
+            style={{ flex: 1 }}
+            backdropOpacity={0.3}
+            animationIn="bounceIn"
+            animationOut="slideOutDown">
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: '#edf0f5',
+              }}>
+              <View
+                style={{
+                  alignSelf: 'stretch',
+                  height: 40,
+                  backgroundColor: '#eff0f5',
+                }}>
+                <TouchableOpacity onPress={() => this.setState({ locationPicker: false })}>
+                  <Text
+                    selectable={false}
+                    allowFontScaling={false}
+                    style={{
+                      color: '#5856d6',
+                      fontWeight: '600',
+                      marginRight: 13,
+                      marginTop: 10,
+                      fontSize: 19,
+                      textAlign: 'right',
+                    }}>
+                    Done
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <GooglePlacesAutocomplete
+                placeholder="Search..."
+                autoFocus={false}
+                returnKeyType="search"
+                listViewDisplayed="auto"
+                fetchDetails
+                renderDescription={row => row.description}
+                onPress={(data, details = null) => {
+                  console.log(`data: ${JSON.stringify(data)}`);
+                  console.log(`details: ${JSON.stringify(details)}`);
+                }}
+                getDefaultValue={() => JSON.stringify(this.state.location)}
+                query={{
+                  key: '',
+                  language: 'en',
+                }}
+                styles={{
+                  description: {
+                    fontFamily: 'roboto',
+                  },
+                }}
+                nearbyPlacesAPI="GooglePlacesSearch"
+              />
+            </View>
+            <MapView
+              style={{
+                flex: 1,
               }}
-              getDefaultValue={() => ''}
-              query={{
-                key: '',
-                language: 'en',
+              region={{
+                latitude: this.state.geocode.latitude,
+                longitude: this.state.geocode.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0922 * ASPECT_RATIO,
               }}
-              styles={{
-                description: {
-                  fontFamily: 'roboto',
-                },
-              }}
-              nearbyPlacesAPI="GooglePlacesSearch"
-            />
-          </View>
-          <MapView
-            style={{
-              flex: 1,
-            }}
-            initialRegion={{
-              latitude: '',
-              longitude: '',
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0922 * ASPECT_RATIO,
-            }}
-            provider={MapView.PROVIDER_GOOGLE}
-            customMapStyle={returnMapStyle()}>
-            <MapView.Marker
-              coordinate={{
-                latitude: '',
-                longitude: '',
-              }}
-            />
-          </MapView>
-        </Modal>
-      </ScrollView>
-    );
+              loadingEnabled
+              provider={MapView.PROVIDER_GOOGLE}
+              customMapStyle={returnMapStyle()}>
+              <MapView.Marker
+                coordinate={{
+                  latitude: this.state.geocode.latitude,
+                  longitude: this.state.geocode.longitude,
+                }}
+              />
+            </MapView>
+          </Modal>
+        </ScrollView>
+      : <View style={styles.spinner}>
+          <ActivityIndicator size="large" color="#0F5A43" />
+        </View>;
   }
 }
 
@@ -520,6 +540,11 @@ const styles = StyleSheet.create({
   center: {
     alignSelf: 'center',
   },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
 });
 
 //picker bugs
@@ -532,3 +557,6 @@ const styles = StyleSheet.create({
 //modal, props
 //fs modal location
 // students,tutors - map
+//permission -signup
+//daynight ctrl
+//apikey
