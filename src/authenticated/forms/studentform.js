@@ -5,18 +5,18 @@ import {
   TextInput,
   StyleSheet,
   Platform,
-  ScrollView,
   Picker,
   Image,
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { LinearGradient, ImagePicker, MapView, Location } from 'expo';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { apple, retro, aubergine } from '../../util/mapStyles';
+import { retro, aubergine } from '../../util/mapStyles';
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,6 +24,7 @@ export default class StudentForm extends React.Component {
   state = {
     location: '',
     appReady: false,
+    addressInput: false,
     visibleModal: false,
     imageError: false,
     locationPicker: false,
@@ -38,6 +39,7 @@ export default class StudentForm extends React.Component {
       latitude: 0,
       longitude: 0,
     },
+    landmarks: '',
   };
 
   static navigationOptions = {
@@ -62,22 +64,34 @@ export default class StudentForm extends React.Component {
 
   async componentWillMount() {
     const { params } = this.props.navigation.state;
-    await Location.setApiKey('');
-    const geocode = await Location.getCurrentPositionAsync({
-      enableHighAccuracy: true,
-    });
-    const location = await Location.reverseGeocodeAsync({
-      latitude: geocode.coords.latitude,
-      longitude: geocode.coords.longitude,
-    });
-    this.setState({
-      firstName: params.data.firstName,
-      lastName: params.data.lastName,
-      dp: params.data.dp,
-      geocode: geocode.coords,
-      appReady: true,
-      location,
-    });
+    await Location.setApiKey(params.data.apikey);
+    if (params.permissionStatus) {
+      const geocode = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
+      const locationData = await Location.reverseGeocodeAsync({
+        latitude: geocode.coords.latitude,
+        longitude: geocode.coords.longitude,
+      });
+      const location = `${locationData[0].name}, ${locationData[0].street}, ${locationData[0]
+        .city}-${locationData[0].postalCode}, ${locationData[0].region}, ${locationData[0]
+        .country}`;
+      this.setState({
+        firstName: params.data.data.firstName,
+        lastName: params.data.data.lastName,
+        dp: params.data.data.dp,
+        geocode: geocode.coords,
+        appReady: true,
+        location,
+      });
+    } else {
+      this.setState({
+        firstName: params.data.data.firstName,
+        lastName: params.data.data.lastName,
+        dp: params.data.data.dp,
+        appReady: true,
+      });
+    }
   }
 
   async pickImage() {
@@ -107,9 +121,10 @@ export default class StudentForm extends React.Component {
   }
 
   render() {
+    const { params } = this.props.navigation.state;
     const ASPECT_RATIO = width / height;
     return this.state.appReady
-      ? <ScrollView>
+      ? <KeyboardAwareScrollView>
           <View style={[styles.border, { marginTop: 40 }]} />
           <TouchableOpacity style={styles.section} onPress={() => this.toggleModal(true)}>
             <Text style={styles.label}>
@@ -260,11 +275,53 @@ export default class StudentForm extends React.Component {
                 *
               </Text>
             </Text>
-            <Text allowFontScaling={false} selectable={false} style={styles.text}>
-              {JSON.stringify(this.state.location)}
+            <Text
+              allowFontScaling={false}
+              selectable={false}
+              style={[styles.textInput, { height: null, fontSize: 20 }]}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {this.state.location}
             </Text>
           </TouchableOpacity>
-          <View style={[styles.border, { marginBottom: 40 }]} />
+          <View style={styles.border} />
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ addressInput: !this.state.addressInput })}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                Landmarks
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
+                *
+              </Text>
+            </Text>
+            <Text
+              allowFontScaling={false}
+              selectable={false}
+              style={[styles.textInput, { height: null, fontSize: 20 }]}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {this.state.addressInput ? null : this.state.landmarks}
+            </Text>
+          </TouchableOpacity>
+          {this.state.addressInput ? null : <View style={[styles.border, { marginBottom: 40 }]} />}
+          {this.state.addressInput
+            ? <View style={{ height: 125 }}>
+                <TextInput
+                  style={styles.addressInput}
+                  multiline
+                  value={this.state.landmarks}
+                  maxLength={100}
+                  placeholder="landmarks / address details or clarifications"
+                  placeholderTextColor="#8a8a92"
+                  returnKeyType="next"
+                  selectionColor="#FDF760"
+                  onChangeText={landmarks => this.setState({ landmarks })}
+                />
+                <View style={[styles.border, { marginBottom: 40 }]} />
+              </View>
+            : null}
 
           <Text allowFontScaling={false} selectable={false} style={styles.title}>
             EDUCATION
@@ -372,26 +429,35 @@ export default class StudentForm extends React.Component {
                 </TouchableOpacity>
               </View>
               <GooglePlacesAutocomplete
-                placeholder="Search..."
+                placeholder="Search For Places"
                 autoFocus={false}
                 returnKeyType="search"
                 listViewDisplayed="auto"
                 fetchDetails
                 renderDescription={row => row.description}
                 onPress={(data, details = null) => {
-                  console.log(`data: ${JSON.stringify(data)}`);
-                  console.log(`details: ${JSON.stringify(details)}`);
+                  this.setState({
+                    location: data.description,
+                    geocode: {
+                      latitude: details.geometry.location.lat,
+                      longitude: details.geometry.location.lng,
+                    },
+                  });
                 }}
-                getDefaultValue={() => JSON.stringify(this.state.location)}
+                getDefaultValue={() => this.state.location}
                 query={{
-                  key: '',
+                  key: params.data.apikey,
                   language: 'en',
                 }}
                 styles={{
                   description: {
                     fontFamily: 'roboto',
                   },
+                  textInput: {
+                    fontFamily: 'roboto',
+                  },
                 }}
+                debounce={200}
                 nearbyPlacesAPI="GooglePlacesSearch"
               />
             </View>
@@ -416,7 +482,7 @@ export default class StudentForm extends React.Component {
               />
             </MapView>
           </Modal>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       : <View style={styles.spinner}>
           <ActivityIndicator size="large" color="#0F5A43" />
         </View>;
@@ -431,11 +497,7 @@ const returnGender = gender => {
 
 const returnMapStyle = () => {
   const hr = new Date().getHours();
-  if (hr < 18) {
-    return Platform.OS === 'ios' ? apple : retro;
-  } else {
-    return aubergine;
-  }
+  return hr < 18 && hr > 4 ? retro : aubergine;
 };
 
 const styles = StyleSheet.create({
@@ -545,11 +607,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
+  addressInput: {
+    flex: 1,
+    fontFamily: 'roboto',
+    fontSize: 22,
+    marginHorizontal: 20,
+  }
 });
 
 //picker bugs
 //erroralert
-//scrollindicator, keyboard
+//scrollindicator
 //validate
 //focus,touchable
 //inputs , defaults
@@ -557,6 +625,9 @@ const styles = StyleSheet.create({
 //modal, props
 //fs modal location
 // students,tutors - map
-//permission -signup
-//daynight ctrl
-//apikey
+//repermission
+//mapview controls - [location,]
+//unmount caching
+//clear input
+// no inline styles
+

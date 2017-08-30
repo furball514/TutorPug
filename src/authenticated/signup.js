@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SecureStore } from 'expo';
+import { SecureStore, Permissions } from 'expo';
 import { apiURL } from '../util/links';
 
 export default class SignupView extends React.Component {
@@ -8,6 +8,7 @@ export default class SignupView extends React.Component {
     data: {},
     token: '',
     appReady: false,
+    permissionStatus: false,
   };
 
   async componentWillMount() {
@@ -21,6 +22,12 @@ export default class SignupView extends React.Component {
         },
       });
       const data = await response.json();
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status === 'granted') {
+        this.setState({
+          permissionStatus: true,
+        });
+      }
       this.setState({ data, token, appReady });
     } catch (error) {
       console.error(error);
@@ -32,7 +39,7 @@ export default class SignupView extends React.Component {
     return this.state.appReady
       ? <View style={styles.container}>
           <Text selectable={false} allowFontScaling={false} style={styles.greeting}>
-            Hi, {this.state.data.firstName}!
+            Hi, {this.state.data.data.firstName}!
           </Text>
           <Text selectable={false} allowFontScaling={false} style={styles.question}>
             Are you a ... ?
@@ -44,6 +51,7 @@ export default class SignupView extends React.Component {
                 navigate('Sform', {
                   data: this.state.data,
                   token: this.state.token,
+                  permissionStatus: this.state.permissionStatus,
                 })}>
               <Text selectable={false} allowFontScaling={false} style={styles.options}>
                 Student
@@ -55,6 +63,7 @@ export default class SignupView extends React.Component {
                 navigate('Tform', {
                   data: this.state.data,
                   token: this.state.token,
+                  permissionStatus: this.state.permissionStatus,
                 })}>
               <Text selectable={false} allowFontScaling={false} style={styles.options}>
                 Tutor
