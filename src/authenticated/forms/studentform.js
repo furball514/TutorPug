@@ -30,6 +30,7 @@ export default class StudentForm extends React.Component {
     locationPicker: false,
     agePicker: false,
     genderPicker: false,
+    /* to db */
     firstName: '',
     lastName: '',
     age: '10',
@@ -75,7 +76,7 @@ export default class StudentForm extends React.Component {
       });
       const location = `${locationData[0].name}, ${locationData[0].street}, ${locationData[0]
         .city}-${locationData[0].postalCode}, ${locationData[0].region}, ${locationData[0]
-        .country}`;
+        .country}`.replace('undefined', '');
       this.setState({
         firstName: params.data.data.firstName,
         lastName: params.data.data.lastName,
@@ -118,6 +119,23 @@ export default class StudentForm extends React.Component {
 
   toggleModal(visibleModal) {
     this.setState({ visibleModal });
+  }
+
+  async setLocation(e) {
+    const locationData = await Location.reverseGeocodeAsync({
+      latitude: e.coordinate.latitude,
+      longitude: e.coordinate.longitude,
+    });
+    const location = `${locationData[0].name}, ${locationData[0].street}, ${locationData[0]
+      .city}-${locationData[0].postalCode}, ${locationData[0].region}, ${locationData[0]
+      .country}`.replace('undefined', '');
+    this.setState({
+      geocode: {
+        latitude: e.coordinate.latitude,
+        longitude: e.coordinate.longitude,
+      },
+      location,
+    });
   }
 
   render() {
@@ -472,13 +490,20 @@ export default class StudentForm extends React.Component {
                 longitudeDelta: 0.0922 * ASPECT_RATIO,
               }}
               loadingEnabled
+              loadingIndicatorColor="#0F5A43"
               provider={MapView.PROVIDER_GOOGLE}
-              customMapStyle={returnMapStyle()}>
+              showsMyLocationButton={false}
+              customMapStyle={returnMapStyle()}
+              onPress={e => this.setLocation(e.nativeEvent)}>
               <MapView.Marker
+                title="You"
                 coordinate={{
                   latitude: this.state.geocode.latitude,
                   longitude: this.state.geocode.longitude,
                 }}
+                draggable
+                //image={require('../../assets/icons/loading.png')}
+                onDragEnd={e => this.setLocation(e.nativeEvent)}
               />
             </MapView>
           </Modal>
@@ -612,7 +637,7 @@ const styles = StyleSheet.create({
     fontFamily: 'roboto',
     fontSize: 22,
     marginHorizontal: 20,
-  }
+  },
 });
 
 //picker bugs
@@ -626,8 +651,9 @@ const styles = StyleSheet.create({
 //fs modal location
 // students,tutors - map
 //repermission
-//mapview controls - [location,]
+//mapview controls - [location,style,maptype]
 //unmount caching
 //clear input
 // no inline styles
 
+//onpress marker evaluating to onpress view - issue
