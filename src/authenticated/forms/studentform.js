@@ -30,6 +30,8 @@ export default class StudentForm extends React.Component {
     locationPicker: false,
     agePicker: false,
     genderPicker: false,
+    mapStyle: retro,
+    mapType: 'standard',
     /* to db */
     firstName: '',
     lastName: '',
@@ -447,7 +449,7 @@ export default class StudentForm extends React.Component {
                 </TouchableOpacity>
               </View>
               <GooglePlacesAutocomplete
-                placeholder="Search For Places"
+                placeholder="Search for places..."
                 autoFocus={false}
                 returnKeyType="search"
                 listViewDisplayed="auto"
@@ -486,14 +488,15 @@ export default class StudentForm extends React.Component {
               region={{
                 latitude: this.state.geocode.latitude,
                 longitude: this.state.geocode.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0922 * ASPECT_RATIO,
+                latitudeDelta: 0.0922 / 8,
+                longitudeDelta: 0.0922 / 8 * ASPECT_RATIO,
               }}
               loadingEnabled
               loadingIndicatorColor="#0F5A43"
               provider={MapView.PROVIDER_GOOGLE}
               showsMyLocationButton={false}
-              customMapStyle={returnMapStyle()}
+              customMapStyle={aubergine}
+              mapType={this.state.mapType}
               onPress={e => this.setLocation(e.nativeEvent)}>
               <MapView.Marker
                 title="You"
@@ -505,6 +508,20 @@ export default class StudentForm extends React.Component {
                 //image={require('../../assets/icons/loading.png')}
                 onDragEnd={e => this.setLocation(e.nativeEvent)}
               />
+              <TouchableOpacity style={[styles.overlays, { right: 108 }]}>
+                <Ionicons name="ios-locate" color="#02b21f" size={35} />
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.overlays, { right: 61 }]}>
+                <Ionicons name="ios-moon" color="#fa661e" size={35} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.overlays, { right: 12 }]}
+                onPress={() =>
+                  this.setState({
+                    mapType: this.state.mapType === 'standard' ? 'hybrid' : 'standard',
+                  })}>
+                <Ionicons name="ios-globe" color="#007aff" size={33} />
+              </TouchableOpacity>
             </MapView>
           </Modal>
         </KeyboardAwareScrollView>
@@ -518,11 +535,6 @@ const returnGender = gender => {
   if (gender == null) {
     return 'Leave blank';
   } else return `${gender.charAt(0).toUpperCase()}${gender.slice(1)}`;
-};
-
-const returnMapStyle = () => {
-  const hr = new Date().getHours();
-  return hr < 18 && hr > 4 ? retro : aubergine;
 };
 
 const styles = StyleSheet.create({
@@ -638,6 +650,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginHorizontal: 20,
   },
+  overlays: {
+    position: 'absolute',
+    bottom: 4,
+    opacity: 0.9,
+  },
 });
 
 //picker bugs
@@ -646,14 +663,16 @@ const styles = StyleSheet.create({
 //validate
 //focus,touchable
 //inputs , defaults
-//style
+//styles
 //modal, props
 //fs modal location
 // students,tutors - map
 //repermission
-//mapview controls - [location,style,maptype]
+//mapview controls - [location,style,maptype], icon,buttons
+//undefined
 //unmount caching
 //clear input
 // no inline styles
+//disable gestures on modal
 
 //onpress marker evaluating to onpress view - issue
