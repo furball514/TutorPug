@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { LinearGradient, ImagePicker, MapView, Location } from 'expo';
+import { LinearGradient, ImagePicker, MapView, Location, Permissions } from 'expo';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -138,6 +138,26 @@ export default class StudentForm extends React.Component {
       },
       location,
     });
+  }
+
+  async locate() {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status === 'granted') {
+      const geocode = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
+      const locationData = await Location.reverseGeocodeAsync({
+        latitude: geocode.coords.latitude,
+        longitude: geocode.coords.longitude,
+      });
+      const location = `${locationData[0].name}, ${locationData[0].street}, ${locationData[0]
+        .city}-${locationData[0].postalCode}, ${locationData[0].region}, ${locationData[0]
+        .country}`.replace('undefined', '');
+      this.setState({
+        geocode: geocode.coords,
+        location,
+      });
+    }
   }
 
   render() {
@@ -354,7 +374,37 @@ export default class StudentForm extends React.Component {
             CONTACT
           </Text>
           <View style={styles.border} />
-          <View style={styles.section} />
+          <View style={styles.section}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                Phone Number
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
+                *
+              </Text>
+            </Text>
+            <TextInput
+              style={styles.textInput}
+              placeholderTextColor="#8a8a92"
+              selectionColor="#FDF760"
+            />
+          </View>
+          <View style={styles.border} />
+          <View style={styles.section}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                E-mail
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
+                *
+              </Text>
+            </Text>
+            <TextInput
+              style={styles.textInput}
+              placeholderTextColor="#8a8a92"
+              selectionColor="#FDF760"
+            />
+          </View>
           <View style={[styles.border, { marginBottom: 40 }]} />
 
           <View style={[styles.border, { marginBottom: 10 }]} />
@@ -505,10 +555,12 @@ export default class StudentForm extends React.Component {
                   longitude: this.state.geocode.longitude,
                 }}
                 draggable
-                //image={require('../../assets/icons/loading.png')}
+                //image={require('../../assets/icons/tutorMarker.png')}
                 onDragEnd={e => this.setLocation(e.nativeEvent)}
               />
-              <TouchableOpacity style={[styles.overlays, { right: 108 }]}>
+              <TouchableOpacity
+                style={[styles.overlays, { right: 108 }]}
+                onPress={() => this.locate()}>
                 <Ionicons name="ios-locate" color="#02b21f" size={35} />
               </TouchableOpacity>
               <TouchableOpacity style={[styles.overlays, { right: 61 }]}>
@@ -664,10 +716,9 @@ const styles = StyleSheet.create({
 //focus,touchable
 //inputs , defaults
 //styles
-//modal, props
-//fs modal location
+//modal, props, style
 // students,tutors - map
-//repermission
+//permission
 //mapview controls - [location,style,maptype], icon,buttons
 //undefined
 //unmount caching
