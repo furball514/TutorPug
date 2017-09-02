@@ -555,9 +555,29 @@ export default class StudentForm extends React.Component {
                   longitude: this.state.geocode.longitude,
                 }}
                 draggable
-                //image={require('../../assets/icons/tutorMarker.png')}
-                onDragEnd={e => this.setLocation(e.nativeEvent)}
-              />
+                onDragEnd={e => this.setLocation(e.nativeEvent)}>
+                <Image
+                  source={require('../../assets/icons/flag-blue.png')}
+                  style={{ height: 80, width: 80 }}>
+                  <Image
+                    style={{
+                      position: 'absolute',
+                      top: 6,
+                      right: 23,
+                      height: 40,
+                      width: 40,
+                      borderRadius: 20,
+                    }}
+                    source={
+                      this.state.imageError
+                        ? require('../../assets/icons/dp.png')
+                        : { uri: this.state.dp }
+                    }
+                    onError={() => this.setState({ imageError: true })}
+                    defaultSource={require('../../assets/icons/dp.png')}
+                  />
+                </Image>
+              </MapView.Marker>
               <TouchableOpacity
                 style={[styles.overlays, { right: 108 }]}
                 onPress={() => this.locate()}>
