@@ -248,6 +248,8 @@ export default class AppView extends React.Component {
           require('./assets/icons/loading.png'),
           require('./assets/icons/dp.png'),
           require('./assets/icons/studentMarker.png'),
+          require('./assets/icons/tutorMarker.png'),
+          require('./assets/icons/flag-blue.png'),
         ],
         fonts: [Ionicons.font, { roboto: require('./assets/fonts/Roboto-Regular.ttf') }],
       });
