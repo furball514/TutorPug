@@ -16,6 +16,7 @@ import { LinearGradient, ImagePicker, MapView, Location, Permissions } from 'exp
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import TagInput from 'react-native-tag-input';
 import { retro, aubergine } from '../../util/mapStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -30,6 +31,8 @@ export default class StudentForm extends React.Component {
     locationPicker: false,
     agePicker: false,
     genderPicker: false,
+    gradePicker: false,
+    subjectPicker: false,
     mapStyle: retro,
     mapType: 'standard',
     /* to db */
@@ -43,6 +46,8 @@ export default class StudentForm extends React.Component {
       longitude: 0,
     },
     landmarks: '',
+    grade: 'Other',
+    subject: 'Languages',
   };
 
   static navigationOptions = {
@@ -161,6 +166,111 @@ export default class StudentForm extends React.Component {
   }
 
   render() {
+    /* */
+    const pickerList = (
+      <Picker
+        style={styles.picker}
+        itemStyle={styles.pickerItem}
+        selectedValue={this.state.age}
+        onValueChange={(itemValue, itemIndex) => this.setState({ age: itemValue })}>
+        <Picker.Item label="Below 7" value="< 7" />
+        <Picker.Item label="7" value="7" />
+        <Picker.Item label="8" value="8" />
+        <Picker.Item label="9" value="9" />
+        <Picker.Item label="10" value="10" />
+        <Picker.Item label="11" value="11" />
+        <Picker.Item label="12" value="12" />
+        <Picker.Item label="13" value="13" />
+        <Picker.Item label="14" value="14" />
+        <Picker.Item label="15" value="15" />
+        <Picker.Item label="16" value="16" />
+        <Picker.Item label="17" value="17" />
+        <Picker.Item label="18" value="18" />
+        <Picker.Item label="19" value="19" />
+        <Picker.Item label="20" value="20" />
+        <Picker.Item label="21" value="21" />
+        <Picker.Item label="22" value="22" />
+        <Picker.Item label="23" value="23" />
+        <Picker.Item label="24" value="24" />
+        <Picker.Item label="25" value="25" />
+        <Picker.Item label="26" value="26" />
+        <Picker.Item label="27" value="27" />
+        <Picker.Item label="28" value="29" />
+        <Picker.Item label="30" value="30" />
+        <Picker.Item label="31" value="31" />
+        <Picker.Item label="32" value="32" />
+        <Picker.Item label="33" value="33" />
+        <Picker.Item label="34" value="34" />
+        <Picker.Item label="35" value="35" />
+        <Picker.Item label="36" value="36" />
+        <Picker.Item label="37" value="37" />
+        <Picker.Item label="38" value="38" />
+        <Picker.Item label="39" value="39" />
+        <Picker.Item label="40" value="40" />
+        <Picker.Item label="41" value="41" />
+        <Picker.Item label="42" value="42" />
+        <Picker.Item label="43" value="43" />
+        <Picker.Item label="44" value="44" />
+        <Picker.Item label="45" vale="45" />
+        <Picker.Item label="46" value="46" />
+        <Picker.Item label="47" value="47" />
+        <Picker.Item label="48" value="48" />
+        <Picker.Item label="49" value="49" />
+        <Picker.Item label="50" value="50" />
+        <Picker.Item label="51" value="51" />
+        <Picker.Item label="52" value="52" />
+        <Picker.Item label="53" value="53" />
+        <Picker.Item label="54" value="54" />
+        <Picker.Item label="55" value="55" />
+        <Picker.Item label="56" value="56" />
+        <Picker.Item label="57" value="57" />
+        <Picker.Item label="58" value="58" />
+        <Picker.Item label="59" value="59" />
+        <Picker.Item label="60" value="60" />
+        <Picker.Item label="61" value="61" />
+        <Picker.Item label="62" value="62" />
+        <Picker.Item label="63" value="63" />
+        <Picker.Item label="64" value="64" />
+        <Picker.Item label="65" value="65" />
+        <Picker.Item label="66" value="66" />
+        <Picker.Item label="67" value="67" />
+        <Picker.Item label="68" value="68" />
+        <Picker.Item label="69" value="69" />
+        <Picker.Item label="70" value="70" />
+        <Picker.Item label="71" value="71" />
+        <Picker.Item label="72" value="72" />
+        <Picker.Item label="73" value="73" />
+        <Picker.Item label="74" value="74" />
+        <Picker.Item label="75" value="75" />
+        <Picker.Item label="76" value="76" />
+        <Picker.Item label="77" value="77" />
+        <Picker.Item label="78" value="78" />
+        <Picker.Item label="79" value="79" />
+        <Picker.Item label="80" value="80" />
+        <Picker.Item label="81" value="81" />
+        <Picker.Item label="82" value="82" />
+        <Picker.Item label="83" value="83" />
+        <Picker.Item label="84" value="84" />
+        <Picker.Item label="85" value="85" />
+        <Picker.Item label="86" value="86" />
+        <Picker.Item label="87" value="87" />
+        <Picker.Item label="88" value="88" />
+        <Picker.Item label="89" value="89" />
+        <Picker.Item label="90" value="90" />
+        <Picker.Item label="91" value="91" />
+        <Picker.Item label="92" value="92" />
+        <Picker.Item label="93" value="93" />
+        <Picker.Item label="94" value="94" />
+        <Picker.Item label="95" value="95" />
+        <Picker.Item label="96" value="96" />
+        <Picker.Item label="97" value="97" />
+        <Picker.Item label="98" value="98" />
+        <Picker.Item label="99" value="99" />
+        <Picker.Item label="Above 99" value="> 99" />
+      </Picker>
+    );
+    /* */
+
     const { params } = this.props.navigation.state;
     const ASPECT_RATIO = width / height;
     return this.state.appReady
@@ -259,14 +369,7 @@ export default class StudentForm extends React.Component {
           {this.state.agePicker && !this.state.genderPicker ? null : <View style={styles.border} />}
           {this.state.agePicker && !this.state.genderPicker
             ? <LinearGradient colors={['white', '#FDF760']}>
-                <Picker
-                  style={styles.picker}
-                  itemStyle={styles.pickerItem}
-                  selectedValue={this.state.age}
-                  onValueChange={(itemValue, itemIndex) => this.setState({ age: itemValue })}>
-                  <Picker.Item label="10" value="10" />
-                  <Picker.Item label="11" value="11" />
-                </Picker>
+                {pickerList}
                 <View style={styles.border} />
               </LinearGradient>
             : null}
@@ -367,7 +470,99 @@ export default class StudentForm extends React.Component {
             EDUCATION
           </Text>
           <View style={styles.border} />
-          <View style={styles.section} />
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ gradePicker: !this.state.gradePicker })}>
+            <Text style={styles.label}>
+              <Text selectable={false} allowFontScaling={false}>
+                Grade / Year
+              </Text>
+              <Text selectable={false} allowFontScaling={false} style={styles.required}>
+                *
+              </Text>
+            </Text>
+            <Text
+              allowFontScaling={false}
+              selectable={false}
+              style={styles.text}
+              onPress={() => this.setState({ gradePicker: !this.state.gradePicker })}>
+              {this.state.grade}
+            </Text>
+          </TouchableOpacity>
+          {this.state.gradePicker && !this.state.subjectPicker
+            ? null
+            : <View style={styles.border} />}
+          {this.state.gradePicker && !this.state.subjectPicker
+            ? <LinearGradient colors={['white', '#FDF760']}>
+                <Picker
+                  style={styles.picker}
+                  itemStyle={styles.pickerItem}
+                  selectedValue={this.state.grade}
+                  onValueChange={(itemValue, itemIndex) => this.setState({ grade: itemValue })}>
+                  <Picker.Item label="Grade 1" value="Grade 1" />
+                  <Picker.Item label="Grade 2" value="Grade 2" />
+                  <Picker.Item label="Grade 3" value="Grade 3" />
+                  <Picker.Item label="Grade 4" value="Grade 4" />
+                  <Picker.Item label="Grade 5" value="Grade 5" />
+                  <Picker.Item label="Grade 6" value="Grade 6" />
+                  <Picker.Item label="Grade 7" value="Grade 7" />
+                  <Picker.Item label="Grade 8" value="Grade 8" />
+                  <Picker.Item label="Grade 9" value="Grade 9" />
+                  <Picker.Item label="Grade 10" value="Grade 10" />
+                  <Picker.Item label="Grade 11" value="Grade 11" />
+                  <Picker.Item label="Grade 12" value="Grade 12" />
+                  <Picker.Item label="University Level" value="University Level" />
+                  <Picker.Item label="Adult Learner" value="Adult Learner" />
+                  <Picker.Item label="Other" value="Other" />
+                </Picker>
+                <View style={styles.border} />
+              </LinearGradient>
+            : null}
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ subjectPicker: !this.state.subjectPicker })}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                Subject
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.required}>
+                *
+              </Text>
+            </Text>
+            <Text allowFontScaling={false} selectable={false} style={styles.text}>
+              {this.state.subject}
+            </Text>
+          </TouchableOpacity>
+          {this.state.subjectPicker && !this.state.gradePicker
+            ? null
+            : <View style={styles.border} />}
+          {this.state.subjectPicker && !this.state.gradePicker
+            ? <View>
+                <LinearGradient colors={['white', '#FDF760']}>
+                  <Picker
+                    style={styles.picker}
+                    itemStyle={styles.pickerItem}
+                    selectedValue={this.state.subject}
+                    onValueChange={(itemValue, itemIndex) => this.setState({ subject: itemValue })}>
+                    <Picker.Item label="" value="" />
+                    <Picker.Item label="" value="" />
+                    <Picker.Item label="" value="" />
+                  </Picker>
+                </LinearGradient>
+                <View style={styles.border} />
+              </View>
+            : null}
+          <View style={styles.section}>
+            <Text style={styles.label}>
+              <Text allowFontScaling={false} selectable={false}>
+                Tags
+              </Text>
+              <Text allowFontScaling={false} selectable={false} style={styles.recommended}>
+                *
+              </Text>
+            </Text>
+            <TagInput />
+          </View>
           <View style={[styles.border, { marginBottom: 40 }]} />
 
           <Text allowFontScaling={false} selectable={false} style={styles.title}>
@@ -586,11 +781,8 @@ export default class StudentForm extends React.Component {
   }
 }
 
-const returnGender = gender => {
-  if (gender == null) {
-    return 'Leave blank';
-  } else return `${gender.charAt(0).toUpperCase()}${gender.slice(1)}`;
-};
+const returnGender = gender =>
+  gender == null ? 'Leave blank' : `${gender.charAt(0).toUpperCase()}${gender.slice(1)}`;
 
 const styles = StyleSheet.create({
   section: {
@@ -730,5 +922,6 @@ const styles = StyleSheet.create({
 //disable gestures on modal
 //dp in marker
 //exif
+//picker open
 
 //onpress marker evaluating to onpress view - issue
