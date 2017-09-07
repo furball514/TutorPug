@@ -16,7 +16,6 @@ import { LinearGradient, ImagePicker, MapView, Location, Permissions } from 'exp
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import TagInput from 'react-native-tag-input';
 import { retro, aubergine } from '../../util/mapStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -33,6 +32,7 @@ export default class StudentForm extends React.Component {
     genderPicker: false,
     gradePicker: false,
     subjectPicker: false,
+    tagInput: false,
     mapStyle: retro,
     mapType: 'standard',
     /* to db */
@@ -48,6 +48,7 @@ export default class StudentForm extends React.Component {
     landmarks: '',
     grade: 'Other',
     subject: 'Languages',
+    tags: [],
   };
 
   static navigationOptions = {
@@ -552,7 +553,9 @@ export default class StudentForm extends React.Component {
                 <View style={styles.border} />
               </View>
             : null}
-          <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => this.setState({ tagInput: !this.state.tagInput })}>
             <Text style={styles.label}>
               <Text allowFontScaling={false} selectable={false}>
                 Tags
@@ -561,9 +564,34 @@ export default class StudentForm extends React.Component {
                 *
               </Text>
             </Text>
-            <TagInput />
-          </View>
-          <View style={[styles.border, { marginBottom: 40 }]} />
+            <Text
+              allowFontScaling={false}
+              selectable={false}
+              style={[styles.textInput, { height: null, fontSize: 20 }]}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {this.state.tags.map(tag =>
+                <Text>
+                  {tag}
+                </Text>
+              )}
+            </Text>
+          </TouchableOpacity>
+          {this.state.tagInput ? null : <View style={[styles.border, { marginBottom: 40 }]} />}
+          {this.state.tagInput
+            ? <View style={{ height: 125 }}>
+                <TextInput
+                  style={styles.addressInput}
+                  multiline
+                  placeholder="Tags are separated by commas or spaces"
+                  placeholderTextColor="#8a8a92"
+                  returnKeyType="next"
+                  selectionColor="#FDF760"
+                />
+                <Text allowFontScaling={false}>helpText</Text>
+                <View style={[styles.border, { marginBottom: 40 }]} />
+              </View>
+            : null}
 
           <Text allowFontScaling={false} selectable={false} style={styles.title}>
             CONTACT
@@ -923,5 +951,6 @@ const styles = StyleSheet.create({
 //dp in marker
 //exif
 //picker open
+//tag autocomplete
 
 //onpress marker evaluating to onpress view - issue
