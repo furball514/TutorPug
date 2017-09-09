@@ -16,6 +16,7 @@ import { LinearGradient, ImagePicker, MapView, Location, Permissions } from 'exp
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import TagInput from '../../util/react-native-tag-input';
 import { retro, aubergine } from '../../util/mapStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -564,31 +565,40 @@ export default class StudentForm extends React.Component {
                 *
               </Text>
             </Text>
-            <Text
-              allowFontScaling={false}
-              selectable={false}
-              style={[styles.textInput, { height: null, fontSize: 20 }]}
-              ellipsizeMode="tail"
-              numberOfLines={1}>
-              {this.state.tags.map(tag =>
-                <Text>
-                  {tag}
-                </Text>
-              )}
-            </Text>
+            <TagInput value={[]} />
           </TouchableOpacity>
           {this.state.tagInput ? null : <View style={[styles.border, { marginBottom: 40 }]} />}
           {this.state.tagInput
-            ? <View style={{ height: 125 }}>
-                <TextInput
-                  style={styles.addressInput}
-                  multiline
-                  placeholder="Tags are separated by commas or spaces"
-                  placeholderTextColor="#8a8a92"
-                  returnKeyType="next"
-                  selectionColor="#FDF760"
+            ? <View>
+                <TagInput
+                  onChange={tags => this.setState({ tags })}
+                  value={this.state.tags}
+                  inputProps={{
+                    style: [
+                      styles.addressInput,
+                      {
+                        fontSize: 22,
+                      },
+                    ],
+                    placeholder: 'Tags are separated by commas or spaces',
+                    placeholderTextColor: '#8a8a92',
+                    placeholderStyle: { fontSize: 14 },
+                    selectionColor: '#FDF760',
+                  }}
+                  tagTextStyle={{
+                    fontFamily: 'roboto',
+                    fontSize: 18,
+                  }}
                 />
-                <Text allowFontScaling={false}>helpText</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    alignSelf: 'center',
+                    borderTopWidth: 1,
+                    borderTopColor: 'black',
+                  }}>
+                  helpText
+                </Text>
                 <View style={[styles.border, { marginBottom: 40 }]} />
               </View>
             : null}
@@ -954,3 +964,5 @@ const styles = StyleSheet.create({
 //tag autocomplete
 
 //onpress marker evaluating to onpress view - issue
+
+//taginput, tags, update prs, center, style to tags, focus

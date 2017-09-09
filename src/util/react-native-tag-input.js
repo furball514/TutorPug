@@ -39,7 +39,6 @@ import PropTypes from 'prop-types';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
@@ -47,7 +46,7 @@ import {
   ScrollView,
   ViewPropTypes
 } from 'react-native';
-import invariant from 'invariant';
+import TextInput2 from './textinput2';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -125,7 +124,7 @@ type Event = {
   nativeEvent: NativeEvent
 };
 
-const DEFAULT_SEPARATORS = [',', ' ', ';', '\n'];
+const DEFAULT_SEPARATORS = [',', ' ', '\n'];
 const DEFAULT_TAG_REGEX = /(.+)/gi;
 
 class TagInput extends React.PureComponent {
@@ -207,13 +206,6 @@ class TagInput extends React.PureComponent {
     const tags = [...this.props.value];
     tags.pop();
     this.props.onChange(tags);
-    this.focus();
-  };
-
-  focus = () => {
-    if (this.tagInput) {
-      this.tagInput.focus();
-    }
   };
 
   removeIndex = (index: number) => {
@@ -228,10 +220,6 @@ class TagInput extends React.PureComponent {
       return;
     }
     const scrollView = this.scrollView;
-    invariant(
-      scrollView,
-      'this.scrollView ref should exist before scrollToBottom called'
-    );
     scrollView.scrollTo({ y, animated: true });
   };
 
@@ -242,7 +230,6 @@ class TagInput extends React.PureComponent {
     const defaultInputProps = {
       autoCapitalize: 'none',
       autoCorrect: false,
-      placeholder: 'username',
       returnKeyType: 'done',
       keyboardType: 'default',
       underlineColorAndroid: 'rgba(0,0,0,0)'
@@ -272,7 +259,6 @@ class TagInput extends React.PureComponent {
 
     return (
       <TouchableWithoutFeedback
-        onPress={this.focus}
         style={[styles.container]}
         onLayout={this.measureWrapper}
       >
@@ -292,11 +278,12 @@ class TagInput extends React.PureComponent {
                   { width: this.state.inputWidth }
                 ]}
               >
-                <TextInput
+                <TextInput2
                   ref={this.tagInputRef}
                   blurOnSubmit={false}
                   onKeyPress={this.onKeyPress}
                   value={text}
+                  text={text}
                   style={[
                     styles.textInput,
                     {
