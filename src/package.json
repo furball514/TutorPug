@@ -8,7 +8,6 @@
   "dependencies": {
     "@expo/vector-icons": "^5.0.0",
     "expo": "^20.0.0",
-    "invariant": "^2.2.2",
     "jwt-decode": "^2.2.0",
     "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.12",
