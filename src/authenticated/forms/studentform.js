@@ -618,7 +618,7 @@ export default class StudentForm extends React.Component {
                     borderTopWidth: 1,
                     borderTopColor: 'black',
                   }}>
-                  helpText
+                  Example: 
                 </Text>
                 <View style={[styles.border, { marginBottom: 40 }]} />
               </View>
@@ -996,5 +996,4 @@ const styles = StyleSheet.create({
 //onpress marker evaluating to onpress view - issue
 
 //taginput, tags, update prs, center, style to tags, focus, typestyle, scroll ,style
-//invariant
 //keyboard dismiss

@@ -315,7 +315,8 @@ export default class AppView extends React.Component {
 
 //log err
 //sentry
-//homescreen space - ios
+//homescreen space - ios, &nbsp; -a, style
 //links
 //uri
 //jwt
+//invariant
