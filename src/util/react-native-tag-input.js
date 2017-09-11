@@ -262,20 +262,20 @@ class TagInput extends React.PureComponent {
         style={[styles.container]}
         onLayout={this.measureWrapper}
       >
-        <View style={[styles.wrapper, { height: wrapperHeight }]}>
+        <View style={[styles.wrapper, { height: wrapperHeight + 50 }]}>
           <ScrollView
             ref={this.scrollViewRef}
             style={styles.tagInputContainerScroll}
             onContentSizeChange={this.onScrollViewContentSizeChange}
             onLayout={this.onScrollViewLayout}
             keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            <View style={styles.tagInputContainer}>
-              {tags}
+            <View>
               <View
                 style={[
                   styles.textInputContainer,
-                  { width: this.state.inputWidth }
+                  { width: this.state.inputWidth, marginBottom: 20 }
                 ]}
               >
                 <TextInput2
@@ -296,6 +296,9 @@ class TagInput extends React.PureComponent {
                   onSubmitEditing={this.parseTags}
                   {...inputProps}
                 />
+              </View>
+              <View style={[styles.tagInputContainer, { marginLeft: 15 }]}>
+                {tags}
               </View>
             </View>
           </ScrollView>
@@ -391,8 +394,8 @@ class Tag extends React.PureComponent {
           ]}
           allowFontScaling={false}
         >
+          &times;&nbsp;
           {this.getLabelValue()}
-          &nbsp;&times;
         </Text>
       </TouchableOpacity>
     );

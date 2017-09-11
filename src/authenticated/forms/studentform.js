@@ -565,7 +565,21 @@ export default class StudentForm extends React.Component {
                 *
               </Text>
             </Text>
-            <TagInput value={[]} />
+            <Text
+              style={[styles.textInput, { height: null, fontSize: 16, color: 'white' }]}
+              numberOfLines={1}
+              allowFontScaling={false}
+              selectable={false}
+              ellipsizeMode="tail">
+              {this.state.tags.map((tag, i) =>
+                <Text key={i}>
+                  <Text style={{ backgroundColor: 'rgba(15,90,67,0.75)' }}>
+                    &nbsp;&times;&nbsp;{tag}&nbsp;
+                  </Text>
+                  &nbsp;,&nbsp;
+                </Text>
+              )}
+            </Text>
           </TouchableOpacity>
           {this.state.tagInput ? null : <View style={[styles.border, { marginBottom: 40 }]} />}
           {this.state.tagInput
@@ -578,6 +592,8 @@ export default class StudentForm extends React.Component {
                       styles.addressInput,
                       {
                         fontSize: 22,
+                        borderBottomWidth: 0.3,
+                        borderBottomColor: 'black',
                       },
                     ],
                     placeholder: 'Tags are separated by commas or spaces',
@@ -588,6 +604,11 @@ export default class StudentForm extends React.Component {
                   tagTextStyle={{
                     fontFamily: 'roboto',
                     fontSize: 18,
+                  }}
+                  tagColor="rgba(15,90,67,0.75)"
+                  tagTextColor="white"
+                  tagContainerStyle={{
+                    borderRadius: 25,
                   }}
                 />
                 <Text
@@ -940,6 +961,15 @@ const styles = StyleSheet.create({
     bottom: 4,
     opacity: 0.9,
   },
+  tag: {
+    justifyContent: 'center',
+    marginTop: 3,
+    marginRight: 3,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 25,
+    backgroundColor: 'rgba(15,90,67,0.75)',
+  },
 });
 
 //picker bugs
@@ -965,4 +995,6 @@ const styles = StyleSheet.create({
 
 //onpress marker evaluating to onpress view - issue
 
-//taginput, tags, update prs, center, style to tags, focus
+//taginput, tags, update prs, center, style to tags, focus, typestyle, scroll ,style
+//invariant
+//keyboard dismiss
