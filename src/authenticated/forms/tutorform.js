@@ -26,3 +26,35 @@ export default class TutorForm extends React.Component {
     return <Text> tutor form</Text>;
   }
 }
+
+//forms - recommended , optional , required
+
+/*//student
+*firstName
+*lastName
+*dp
+*geocode
+*age
+*gender
+*grade
+*subject
+*tags
+*number
+*email
+*/
+
+/*//tutor
+*firstName
+*lastName
+*dp
+*geocode , teaching point
+*age
+*gender
+*education
+*tags
+*number
+*email
+*website
+*about/bio
+*certificate
+*/

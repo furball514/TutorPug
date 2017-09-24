@@ -320,3 +320,17 @@ export default class AppView extends React.Component {
 //uri
 //jwt
 //invariant
+
+//minify
+//instahelp
+//points,stars
+//github-about,link,limitations,photos,licenses// one branch -master
+//exp greet
+//editable profile-tab , tag students
+//call - web,phone (actionsheet),
+//contacts , open in whtsap/meseage
+//share
+//gifted chat, asynstorage, uniquechannelid
+//sort by - subject,location,advanced ... lists
+//home,saved,chats,profile
+//notifs

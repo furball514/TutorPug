@@ -618,7 +618,7 @@ export default class StudentForm extends React.Component {
                     borderTopWidth: 1,
                     borderTopColor: 'black',
                   }}>
-                  Example: 
+                  Example:
                 </Text>
                 <View style={[styles.border, { marginBottom: 40 }]} />
               </View>
@@ -997,3 +997,6 @@ const styles = StyleSheet.create({
 
 //taginput, tags, update prs, center, style to tags, focus, typestyle, scroll ,style
 //keyboard dismiss
+
+//dark/light keyboard
+//oauth prefill
