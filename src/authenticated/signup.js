@@ -14,7 +14,7 @@ export default class SignupView extends React.Component {
   async componentWillMount() {
     try {
       const appReady = true;
-      const token = await SecureStore.getValueWithKeyAsync('TOKEN');
+      const token = await SecureStore.getItemAsync('TOKEN');
       const response = await fetch(`${apiURL}/getAll`, {
         method: 'GET',
         headers: {

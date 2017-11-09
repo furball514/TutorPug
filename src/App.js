@@ -19,7 +19,7 @@ class App extends React.Component {
   componentWillMount() {
     if (!this.props.signedin)
       try {
-        SecureStore.deleteValueWithKeyAsync('TOKEN');
+        SecureStore.deleteItemAsync('TOKEN');
         console.log('deleted');
       } catch (error) {
         console.error(error);
@@ -262,7 +262,7 @@ export default class AppView extends React.Component {
 
   async _isSignedin() {
     try {
-      const token = await SecureStore.getValueWithKeyAsync('TOKEN');
+      const token = await SecureStore.getItemAsync('TOKEN');
       const response = await fetch(`${apiURL}/expiryCheck`, {
         method: 'GET',
         headers: {

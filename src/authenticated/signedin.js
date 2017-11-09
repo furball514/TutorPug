@@ -12,9 +12,9 @@ export class SignedIn extends React.Component {
   };
 
   async componentWillMount() {
-    SecureStore.deleteValueWithKeyAsync('TOKEN');
+    SecureStore.deleteItemAsync('TOKEN');
     /*try {
-      const token = await SecureStore.getValueWithKeyAsync('TOKEN');
+      const token = await SecureStore.getItemAsync('TOKEN');
       if (token !== null) {
         let decoded = jwtDecoder(token);
         this.setState({

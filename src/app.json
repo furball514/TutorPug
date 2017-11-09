@@ -4,7 +4,7 @@
     "description": "A find a tutor app",
     "slug": "TutorPug",
     "privacy": "public",
-    "sdkVersion": "20.0.0",
+    "sdkVersion": "21.0.0",
     "version": "1.0.0",
     "primaryColor": "#0F5A43",
     "orientation": "portrait",
