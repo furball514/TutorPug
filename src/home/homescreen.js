@@ -96,7 +96,7 @@ class SignUp extends React.Component {
       } finally {
         try {
           try {
-            await SecureStore.setValueWithKeyAsync(formatted.token, 'TOKEN');
+            await SecureStore.setItemAsync('TOKEN', formatted.token);
           } catch (error) {
             console.error(error);
           }
@@ -175,7 +175,7 @@ class SignIn extends React.Component {
       } finally {
         try {
           try {
-            await SecureStore.setValueWithKeyAsync(formatted.token, 'TOKEN');
+            await SecureStore.setItemAsync('TOKEN', formatted.token);
           } catch (error) {
             console.error(error);
           }
